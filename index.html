@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네온 타입 어택 - NEON TYPER</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', sans-serif;
+        }
+        body {
+            background-color: #070710;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,0,85,0.15) 0%, transparent 70%);
+            top: 10%;
+            left: 20%;
+            z-index: -1;
+            animation: floatGlow 8s infinite alternate ease-in-out;
+        }
+        .bg-glow-2 {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0,255,255,0.15) 0%, transparent 70%);
+            bottom: 10%;
+            right: 20%;
+            z-index: -1;
+            animation: floatGlow 10s infinite alternate-reverse ease-in-out;
+        }
+        @keyframes floatGlow {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(40px) scale(1.1); }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(20, 20, 35, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(255, 0, 128, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            max-width: 540px;
+            width: 100%;
+            animation: containerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes containerPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #ff0055, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: titlePulse 3s infinite alternate;
+        }
+        @keyframes titlePulse {
+            0% { filter: drop-shadow(0 0 2px rgba(255,0,85,0.4)); }
+            100% { filter: drop-shadow(0 0 10px rgba(0,255,255,0.7)); }
+        }
+
+        p {
+            color: #8f8fa8;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #8f8fa8;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-btn:hover {
+            border-color: #00ffff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: linear-gradient(45deg, #ff0055, #7928ca);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+            transform: scale(1.02);
+        }
+
+        .input-box, .nickname-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #ff0055;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            margin-bottom: 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-box:focus, .nickname-input:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ffff, #0070f3);
+            border: none;
+            color: #070710;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.4);
+            width: 100%;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        #score { color: #00ffff; }
+        #statValue { color: #ff0055; }
+        #combo { color: #ffe600; }
+        
+        .word-display {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1px;
+            min-height: 50px;
+            line-height: 1.4;
+            word-break: keep-all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: wordBounce 0.2s ease-in-out;
+        }
+        @keyframes wordBounce {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .ranking-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #00ffff;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            max-height: 120px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .ranking-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #ff0055;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 4px;
+        }
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 6px;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+        }
+    </style>
+
+    <!-- Supabase SDK 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <!-- 홈 화면 -->
+        <div id="homeScreen" class="screen active">
+            <h1>⚡ NEON TYPER ⚡</h1>
+            <p>수파베이스 실시간 클라우드 랭킹</p>
+            
+            <div class="ranking-box" id="rankingView">
+                <div class="ranking-title">🏆 클라우드 랭킹 로딩 중...</div>
+            </div>
+
+            <div class="tab-grid">
+                <button class="tab-btn active" id="mode-speed" onclick="setMode('speed')">⚡ 스피드 러시<br><span style="font-size:10px; color:#aaa;">30초 극한 연타</span></button>
+                <button class="tab-btn" id="mode-survive" onclick="setMode('survive')">🛡️ 서바이벌<br><span style="font-size:10px; color:#aaa;">3초 제한 타임어택</span></button>
+                <button class="tab-btn" id="mode-sentence" onclick="setMode('sentence')">📜 딥 센텐스<br><span style="font-size:10px; color:#aaa;">명언 문장 타자</span></button>
+                <button class="tab-btn" id="mode-boss" onclick="setMode('boss')">🐉 보스 레이드<br><span style="font-size:10px; color:#aaa;">고난도 단어 격파</span></button>
+            </div>
+
+            <input type="text" id="nicknameInput" class="nickname-input" placeholder="플레이어 닉네임 입력" maxlength="10" autocomplete="off">
+            <button class="btn" onclick="goToGame()">게임 시작하기 🚀</button>
+        </div>
+
+        <!-- 게임 플레이 화면 -->
+        <div id="gameScreen" class="screen">
+            <h1 id="welcomePlayer" style="font-size: 22px;">PLAYER</h1>
+            <p id="modeDesc">단어를 입력하는 순간 타이머가 시작됩니다!</p>
+            
+            <div class="info-panel">
+                <div>점수: <span id="score">0</span></div>
+                <div>콤보: <span id="combo">0</span>🔥</div>
+                <div><span id="statLabel">시간</span>: <span id="statValue">30</span></div>
+            </div>
+
+            <div id="wordDisplay" class="word-display">준비...</div>
+            
+            <input type="text" id="inputBox" class="input-box" placeholder="첫 글자를 입력하세요" autocomplete="off">
+            <button class="btn" style="background: rgba(255,255,255,0.1); color: #fff; box-shadow: none; font-size: 13px; padding: 10px;" onclick="goToHome()">메인 메뉴로 가기</button>
+        </div>
+    </div>
+
+    <script>
+        // 수파베이스 접속 정보 (자동 적용됨)
+        const SUPABASE_URL = "https://kfpnmxgzqvcurmxjyyga.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_IiOTW-J-iPtliC9yKN8lSg_BqkGo_DW";
+        
+        let supabase = null;
+        if (typeof window.supabase !== 'undefined') {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        const wordPool = [
+            "사과", "바나나", "포도", "딸기", "수박", "참외", "복숭아", "자두", "감귤", "토마토",
+            "하늘", "바다", "구름", "별빛", "달빛", "태양", "산맥", "강물", "나무", "꽃잎",
+            "컴퓨터", "프로그램", "알고리즘", "데이터베이스", "네트워크", "인공지능", "머신러닝", "사이버", "보안", "클라우드",
+            "대한민국", "서울시", "한국어", "국립국어원", "표준어", "사전", "어휘", "문법", "맞춤법", "발음",
+            "자전거", "자동차", "비행기", "고속열차", "지하철", "버스", "정류장", "횡단보도", "신호등", "고속도로",
+            "도서관", "대학교", "연구소", "병원", "경찰서", "소방서", "우체국", "박물관", "미술관", "영화관"
+        ];
+
+        const sentencePool = [
+            "인생은 속도가 아니라 방향이다.",
+            "고통이 없으면 얻는 것도 없다.",
+            "오늘 할 수 있는 일을 내일로 미루지 마라.",
+            "작은 기회로부터 종종 위대한 업적이 시작된다.",
+            "자신을 믿어라. 그러면 할 수 있는 길을 찾을 것이다.",
+            "행복은 콧등을 스치는 바람처럼 다가온다.",
+            "실패란 넘어지는 것이 아니라 그 자리에 머무는 것이다.",
+            "꿈을 꿀 수 있다면 그 꿈을 이룰 수도 있다."
+        ];
+
+        const bossPool = [
+            "하이퍼리얼리즘인공지능시스템", "사이버네틱스시퀀셜알고리즘", "일렉트로닉스볼텍스프로토콜",
+            "디지털트랜스포메이션엔지니어", "네트워크분산처리클러스터링", "퀀텀컴퓨팅암호화체계검증"
+        ];
+
+        let selectedMode = 'speed'; 
+        let nickname = "";
+        let score = 0;
+        let combo = 0;
+        let statValue = 30; 
+        let isPlaying = false;
+        let isStarted = false;
+        let gameInterval;
+        let currentWord = "";
+
+        const homeScreen = document.getElementById('homeScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const nicknameInput = document.getElementById('nicknameInput');
+        const rankingView = document.getElementById('rankingView');
+        const welcomePlayer = document.getElementById('welcomePlayer');
+        
+        const wordDisplay = document.getElementById('wordDisplay');
+        const inputBox = document.getElementById('inputBox');
+        const scoreEl = document.getElementById('score');
+        const comboEl = document.getElementById('combo');
+        const statLabel = document.getElementById('statLabel');
+        const statValueEl = document.getElementById('statValue');
+
+        // 수파베이스에서 실시간 랭킹 불러오기
+        async function fetchRankings() {
+            const modeNames = { speed: '⚡ 스피드 러시', survive: '🛡️ 서바이벌', sentence: '📜 딥 센텐스', boss: '🐉 보스 레이드' };
+            
+            if (!supabase) {
+                rankingView.innerHTML = `<div class="ranking-title">⚠️ 수파베이스 연동 중...</div>`;
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('rankings')
+                    .select('nickname, score')
+                    .eq('mode', selectedMode)
+                    .order('score', { ascending: false })
+                    .limit(3);
+
+                if (error) throw error;
+
+                let html = `<div class="ranking-title">🏆 [${modeNames[selectedMode]}] 실시간 랭킹 TOP 3</div>`;
+                const medals = ['🥇', '🥈', '🥉'];
+
+                if (data && data.length > 0) {
+                    data.forEach((row, index) => {
+                        html += `<div class="rank-item"><span>${medals[index] || '•'} ${row.nickname}</span> <span>${row.score}점</span></div>`;
+                    });
+                } else {
+                    html += `<div style="text-align:center; padding:5px; color:#aaa;">등록된 기록이 없습니다. 첫 번째 주인공이 되어보세요!</div>`;
+                }
+
+                rankingView.innerHTML = html;
+            } catch (e) {
+                rankingView.innerHTML = `<div class="ranking-title">🏆 랭킹 불러오는 중... (테이블 확인 필요)</div>`;
+            }
+        }
+
+        function setMode(mode) {
+            selectedMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`mode-${mode}`).classList.add('active');
+            fetchRankings();
+        }
+
+        fetchRankings();
+
+        function goToGame() {
+            const name = nicknameInput.value.trim();
+            if (!name) {
+                alert("닉네임을 입력해주세요!");
+                nicknameInput.focus();
+                return;
+            }
+            nickname = name;
+            
+            const modeNames = { speed: '스피드 러시', survive: '서바이벌 모드', sentence: '딥 센텐스', boss: '보스 레이드' };
+            welcomePlayer.textContent = `${nickname} | ${modeNames[selectedMode]}`;
+            
+            if (selectedMode === 'survive') {
+                statLabel.textContent = "단어 제한 시간";
+                statValue = 4; 
+            } else if (selectedMode === 'boss') {
+                statLabel.textContent = "남은 시간";
+                statValue = 45; 
+            } else {
+                statLabel.textContent = "남은 시간";
+                statValue = 30;
+            }
+
+            homeScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+
+            initRound();
+        }
+
+        function goToHome() {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            isStarted = false;
+            gameScreen.classList.remove('active');
+            homeScreen.classList.add('active');
+            fetchRankings();
+        }
+
+        function initRound() {
+            score = 0;
+            combo = 0;
+            isPlaying = true;
+            isStarted = false;
+            scoreEl.textContent = score;
+            comboEl.textContent = combo;
+            statValueEl.textContent = statValue;
+            
+            inputBox.value = "";
+            inputBox.focus();
+            nextWord();
+        }
+
+        function startTimerIfNeeded() {
+            if (!isStarted) {
+                isStarted = true;
+                clearInterval(gameInterval);
+                gameInterval = setInterval(() => {
+                    statValue--;
+                    statValueEl.textContent = statValue;
+                    if (statValue <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            }
+        }
+
+        function nextWord() {
+            let pool = selectedMode === 'sentence' ? sentencePool : (selectedMode === 'boss' ? bossPool : wordPool);
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            currentWord = pool[randomIndex];
+            wordDisplay.textContent = currentWord;
+            
+            wordDisplay.style.animation = 'none';
+            wordDisplay.offsetHeight; 
+            wordDisplay.style.animation = 'wordBounce 0.2s ease-in-out';
+
+            if (selectedMode === 'survive' && isStarted) {
+                statValue = 4; 
+                statValueEl.textContent = statValue;
+            }
+        }
+
+        let isComposing = false;
+        inputBox.addEventListener('compositionstart', () => { isComposing = true; });
+        inputBox.addEventListener('compositionend', () => { 
+            isComposing = false; 
+            if (inputBox.value.length > 0) startTimerIfNeeded();
+            checkInput(); 
+        });
+        inputBox.addEventListener('input', () => {
+            if (!isPlaying) return;
+            if (inputBox.value.length > 0) startTimerIfNeeded();
+            if (!isComposing) checkInput();
+        });
+
+        function checkInput() {
+            const typedValue = inputBox.value.trim();
+            if (typedValue === currentWord) {
+                combo++;
+                let addScore = selectedMode === 'sentence' ? 30 : (selectedMode === 'boss' ? 50 : 10);
+                score += addScore + (combo >= 5 ? 10 : 0);
+                
+                scoreEl.textContent = score;
+                comboEl.textContent = combo;
+                
+                inputBox.value = "";
+                nextWord();
+            }
+        }
+
+        // 게임 종료 및 수파베이스 데이터베이스 저장
+        async function endGame() {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            inputBox.value = "";
+            wordDisplay.textContent = "GAME OVER 🛑";
+
+            if (supabase) {
+                try {
+                    const { error } = await supabase
+                        .from('rankings')
+                        .insert([{ nickname: nickname, score: score, mode: selectedMode }]);
+
+                    if (error) throw error;
+                    alert(`게임 종료! ${nickname}님의 점수(${score}점)가 수파베이스 서버에 안전하게 저장되었습니다! ⚡`);
+                } catch (e) {
+                    alert(`게임 종료! ${nickname}님의 점수: ${score}점 (서버 저장 실패 - rankings 테이블을 확인해 주세요)`);
+                }
+            } else {
+                alert(`게임 종료! ${nickname}님의 최종 점수: ${score}점`);
+            }
+
+            setTimeout(goToHome, 1500);
+        }
+    </script>
+
+</body>
+</html>
