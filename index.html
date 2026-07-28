@@ -18,9 +18,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
             position: relative;
+            padding: 20px 0;
         }
 
         .bg-glow {
@@ -50,14 +51,14 @@
 
         .container {
             text-align: center;
-            background: rgba(20, 20, 35, 0.8);
+            background: rgba(20, 20, 35, 0.85);
             backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 25px;
             box-shadow: 0 0 40px rgba(255, 0, 128, 0.3);
             border: 1px solid rgba(0, 255, 255, 0.25);
             max-width: 540px;
-            width: 100%;
+            width: 92%;
             animation: containerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         @keyframes containerPop {
@@ -65,7 +66,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* 로고 스타일링 */
         .logo-wrapper {
             width: 100%;
             max-width: 380px;
@@ -109,7 +109,7 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 12px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s;
         }
         .tab-btn:hover {
             border-color: #00ffff;
@@ -124,7 +124,7 @@
             transform: scale(1.02);
         }
 
-        /* 이메일 로그인 영역 */
+        /* 로그인 영역 */
         .auth-container {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 0, 85, 0.3);
@@ -189,19 +189,6 @@
             font-size: 11px;
         }
 
-        .input-box, .nickname-input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid #ff0055;
-            border-radius: 12px;
-            color: white;
-            outline: none;
-            margin-bottom: 10px;
-        }
-
         .btn {
             background: linear-gradient(45deg, #00ffff, #0070f3);
             border: none;
@@ -247,6 +234,19 @@
             justify-content: center;
         }
 
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #ff0055;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
         .ranking-box {
             background: rgba(0, 0, 0, 0.4);
             padding: 10px;
@@ -280,11 +280,111 @@
             cursor: pointer;
             font-size: 12px;
             margin-left: 4px;
-            padding: 2px;
+        }
+
+        /* 상점 모달 및 스타일 */
+        .shop-btn {
+            background: linear-gradient(45deg, #ffe600, #ff0055);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(255, 230, 0, 0.4);
+            width: 100%;
+        }
+        .shop-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .shop-modal.active {
+            display: flex;
+        }
+        .shop-content {
+            background: #141423;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,255,255,0.3);
+        }
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .shop-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .shop-tab-btn {
+            flex: 1;
+            padding: 6px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #aaa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .shop-tab-btn.active {
+            background: #00ffff;
+            color: #000;
+        }
+        .shop-item {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .buy-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .buy-btn:disabled {
+            background: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+        .equip-btn {
+            background: #ff0055;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
         }
     </style>
 
-    <!-- Supabase SDK 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -293,10 +393,10 @@
     <div class="bg-glow-2"></div>
 
     <div class="container">
-        <!-- 홈 화면 -->
+        <!-- 메인 홈 화면 -->
         <div id="homeScreen" class="screen active">
             
-            <!-- ⚡ 네온 로고 영역 -->
+            <!-- 네온 로고 -->
             <div class="logo-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 180" width="100%">
                     <defs>
@@ -328,14 +428,12 @@
                         </linearGradient>
                     </defs>
 
-                    <!-- 심볼 아이콘 -->
                     <g transform="translate(25, 25)">
                         <rect x="0" y="0" width="120" height="120" rx="26" fill="rgba(0, 255, 255, 0.03)" stroke="url(#grad-cyan)" stroke-width="4" filter="url(#glow-cyan)" />
                         <rect x="10" y="10" width="100" height="100" rx="18" fill="none" stroke="rgba(255, 0, 127, 0.4)" stroke-width="2" />
                         <path d="M 70 20 L 35 68 L 60 68 L 45 100 L 85 50 L 60 50 Z" fill="url(#grad-pink)" stroke="#ff007f" stroke-width="2" filter="url(#glow-pink)" />
                     </g>
 
-                    <!-- 텍스트 로고 -->
                     <text x="170" y="95" font-family="'Pretendard', sans-serif" font-size="52" font-weight="900" fill="url(#grad-cyan)" filter="url(#glow-cyan)" letter-spacing="4">NEON</text>
                     <text x="345" y="95" font-family="'Pretendard', sans-serif" font-size="52" font-weight="900" fill="url(#grad-pink)" filter="url(#glow-pink)" letter-spacing="4">TYPER</text>
                     <text x="172" y="132" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#a0a0c0" letter-spacing="5">HIGH SPEED TYPING ATTACK</text>
@@ -346,10 +444,10 @@
 
             <p>명예의 전당 TOP 3 챌린지</p>
 
-            <!-- 이메일 인증 관리 영역 -->
+            <!-- 간편 로그인 / 회원가입 영역 -->
             <div class="auth-container">
                 <div id="loggedOutUI">
-                    <input type="email" id="emailInput" class="auth-input" placeholder="이메일 주소 입력">
+                    <input type="text" id="usernameInput" class="auth-input" placeholder="닉네임 입력 (예: dragonbin1)" autocomplete="off">
                     <input type="password" id="passwordInput" class="auth-input" placeholder="비밀번호 입력">
                     <div class="auth-btn-group">
                         <button class="auth-sub-btn login-btn" onclick="handleLogin()">로그인</button>
@@ -358,12 +456,20 @@
                 </div>
                 <div id="loggedInUI" style="display: none;">
                     <div class="user-profile">
-                        <span>👤 <strong id="userDisplay">사용자</strong> <span id="adminTag" class="admin-badge" style="display:none;">DEVELOPER</span></span>
+                        <span>
+                            <span id="titleTag" style="color:#ffe600; font-weight:bold;">[초보]</span>
+                            👤 <strong id="userDisplay">사용자</strong>
+                            <span id="adminTag" class="admin-badge" style="display:none;">DEVELOPER</span>
+                        </span>
                         <button class="logout-btn" onclick="handleLogout()">로그아웃</button>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- 상점 오픈 버튼 -->
+            <button class="shop-btn" id="openShopBtn" onclick="openShopModal()" style="display: none;">🛍️ 네온 상점 & 오늘의 무료 (💰 <span id="coinDisplay">0</span> 코인)</button>
+
+            <!-- 랭킹 박스 -->
             <div class="ranking-box" id="rankingView">
                 <div class="ranking-title">🏆 명예의 전당 TOP 3 로딩 중...</div>
             </div>
@@ -375,14 +481,13 @@
                 <button class="tab-btn" id="mode-boss" onclick="setMode('boss')">🐉 보스 레이드<br><span style="font-size:10px; color:#aaa;">고난도 단어 격파</span></button>
             </div>
 
-            <input type="text" id="nicknameInput" class="nickname-input" placeholder="로그인 시 자동 적용" readonly autocomplete="off">
             <button class="btn" id="startBtn" onclick="goToGame()" disabled>로그인 후 시작 가능 🚀</button>
         </div>
 
         <!-- 게임 플레이 화면 -->
         <div id="gameScreen" class="screen">
-            <h1 id="welcomePlayer" style="font-size: 20px;">PLAYER</h1>
-            <p id="modeDesc">단어를 입력하는 순간 타이머가 시작됩니다!</p>
+            <h1 id="welcomePlayer" style="font-size: 18px; color: #00ffff;">PLAYER</h1>
+            <p id="modeDesc">첫 단어를 입력하는 순간 타이머가 시작됩니다!</p>
             
             <div class="info-panel">
                 <div>점수: <span id="score">0</span></div>
@@ -397,39 +502,64 @@
         </div>
     </div>
 
+    <!-- 네온 상점 모달 -->
+    <div class="shop-modal" id="shopModal">
+        <div class="shop-content">
+            <div class="shop-header">
+                <h3>🛍️ 네온 아이템 상점</h3>
+                <span style="cursor:pointer; font-size:20px;" onclick="closeShopModal()">✖</span>
+            </div>
+            
+            <div style="font-size:13px; margin-bottom:12px; color:#ffe600;">
+                현재 보유 코인: 💰 <strong id="modalCoinDisplay">0</strong>
+                <button id="devCoinBtn" onclick="devAdjustCoins()" style="display:none; margin-left:10px; background:#ff0055; color:#fff; border:none; border-radius:4px; padding:2px 6px; font-size:10px; cursor:pointer;">⚙️ [개발자] 코인 조절</button>
+            </div>
+
+            <div class="shop-tabs">
+                <button class="shop-tab-btn active" id="shopTabTitle" onclick="switchShopTab('titles')">🏷️ 칭호 상점</button>
+                <button class="shop-tab-btn" id="shopTabFree" onclick="switchShopTab('free')">🎁 오늘의 무료</button>
+            </div>
+
+            <!-- 칭호 상점 목록 -->
+            <div id="shopTitlesView">
+                <!-- JS에서 동적 생성 -->
+            </div>
+
+            <!-- 오늘의 무료 목록 -->
+            <div id="shopFreeView" style="display:none; text-align:center; padding:10px 0;">
+                <p style="color:#aaa; font-size:12px; margin-bottom:15px;">하루에 한 번! 무료 코인 또는 5% 확률의 전설 칭호를 획득하세요.</p>
+                <button class="btn" id="claimFreeBtn" onclick="claimFreeReward()" style="width: auto; padding: 10px 25px;">🎁 오늘의 무료 보상 받기</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = "https://kfpnmxgzqvcurmxjyyga.supabase.co";
         const SUPABASE_KEY = "sb_publishable_IiOTW-J-iPtliC9yKN8lSg_BqkGo_DW";
-        const DEV_EMAIL = "y4794341@gmail.com"; 
+        const DEV_USERNAME = "dragonbin1"; 
         
         let supabaseClient = null;
         if (window.supabase && typeof window.supabase.createClient === 'function') {
             supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
-        const wordPool = [
-            "사과", "바나나", "포도", "딸기", "수박", "참외", "복숭아", "자두", "감귤", "토마토",
-            "하늘", "바다", "구름", "별빛", "달빛", "태양", "산맥", "강물", "나무", "꽃잎",
-            "컴퓨터", "프로그램", "알고리즘", "데이터베이스", "네트워크", "인공지능", "머신러닝", "사이버", "보안", "클라우드"
-        ];
+        const wordPool = ["사과", "바나나", "포도", "딸기", "수박", "참외", "복숭아", "자두", "감귤", "토마토", "하늘", "바다", "구름", "별빛", "달빛", "태양", "산맥", "강물", "나무", "꽃잎"];
+        const sentencePool = ["인생은 속도가 아니라 방향이다.", "고통이 없으면 얻는 것도 없다.", "오늘 할 수 있는 일을 내일로 미루지 마라.", "자신을 믿어라. 길은 반드시 열린다."];
+        const bossPool = ["하이퍼리얼리즘인공지능시스템", "사이버네틱스시퀀셜알고리즘", "일렉트로닉스볼텍스프로토콜", "디지털트랜스포메이션엔지니어"];
 
-        const sentencePool = [
-            "인생은 속도가 아니라 방향이다.",
-            "고통이 없으면 얻는 것도 없다.",
-            "오늘 할 수 있는 일을 내일로 미루지 마라.",
-            "작은 기회로부터 종종 위대한 업적이 시작된다.",
-            "자신을 믿어라. 그러면 할 수 있는 길을 찾을 것이다."
-        ];
-
-        const bossPool = [
-            "하이퍼리얼리즘인공지능시스템", "사이버네틱스시퀀셜알고리즘", "일렉트로닉스볼텍스프로토콜",
-            "디지털트랜스포메이션엔지니어", "네트워크분산처리클러스터링"
+        // 상점 판매 칭호 리스트
+        const availableTitles = [
+            { name: "⚡ 타자 신동", price: 100 },
+            { name: "🔥 빛의 속도", price: 300 },
+            { name: "🐉 드래곤 타이퍼", price: 500 },
+            { name: "👑 네온 마스터", price: 1000 },
+            { name: "🌌 전설의 타이퍼", price: 2500 }
         ];
 
         let currentUser = null;
+        let username = "";
         let isAdmin = false;
         let selectedMode = 'speed'; 
-        let nickname = "";
         let score = 0;
         let combo = 0;
         let statValue = 30; 
@@ -438,17 +568,27 @@
         let gameInterval;
         let currentWord = "";
 
+        // 유저 세이브 데이터
+        let userData = {
+            coins: 0,
+            titles: ["🐣 초보"],
+            equippedTitle: "🐣 초보",
+            lastFreeDate: ""
+        };
+
         const homeScreen = document.getElementById('homeScreen');
         const gameScreen = document.getElementById('gameScreen');
-        const nicknameInput = document.getElementById('nicknameInput');
         const rankingView = document.getElementById('rankingView');
         const welcomePlayer = document.getElementById('welcomePlayer');
         const startBtn = document.getElementById('startBtn');
-        
         const loggedOutUI = document.getElementById('loggedOutUI');
         const loggedInUI = document.getElementById('loggedInUI');
         const userDisplay = document.getElementById('userDisplay');
         const adminTag = document.getElementById('adminTag');
+        const titleTag = document.getElementById('titleTag');
+        const openShopBtn = document.getElementById('openShopBtn');
+        const coinDisplay = document.getElementById('coinDisplay');
+        const modalCoinDisplay = document.getElementById('modalCoinDisplay');
 
         const wordDisplay = document.getElementById('wordDisplay');
         const inputBox = document.getElementById('inputBox');
@@ -457,29 +597,36 @@
         const statLabel = document.getElementById('statLabel');
         const statValueEl = document.getElementById('statValue');
 
-        async function handleLogin() {
-            const email = document.getElementById('emailInput').value.trim();
-            const password = document.getElementById('passwordInput').value.trim();
-            if (!email || !password) return alert("이메일과 비밀번호를 모두 입력하세요.");
+        // 이메일 형식 변환 함수
+        function getVirtualEmail(userStr) {
+            return `${userStr.trim().toLowerCase()}@neon.game`;
+        }
 
+        async function handleLogin() {
+            const userStr = document.getElementById('usernameInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            if (!userStr || !password) return alert("닉네임과 비밀번호를 모두 입력하세요.");
+
+            const email = getVirtualEmail(userStr);
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
-                alert("로그인 실패: " + error.message);
+                alert("로그인 실패: 닉네임 또는 비밀번호를 확인해주세요.");
             } else {
                 updateUIWithSession(data.session);
             }
         }
 
         async function handleSignUp() {
-            const email = document.getElementById('emailInput').value.trim();
+            const userStr = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
-            if (!email || !password) return alert("이메일과 비밀번호를 모두 입력하세요.");
+            if (!userStr || !password) return alert("닉네임과 비밀번호를 모두 입력하세요.");
 
+            const email = getVirtualEmail(userStr);
             const { data, error } = await supabaseClient.auth.signUp({ email, password });
             if (error) {
                 alert("회원가입 실패: " + error.message);
             } else {
-                alert("회원가입 성공! 로그인하여 게임을 이용해 주세요.");
+                alert("🎉 회원가입 성공! [로그인] 버튼을 눌러 게임에 접속해주세요.");
             }
         }
 
@@ -502,16 +649,29 @@
             if (session && session.user) {
                 currentUser = session.user;
                 const userEmail = currentUser.email;
-                nickname = userEmail.split('@')[0];
+                username = userEmail.split('@')[0];
 
-                isAdmin = (userEmail.toLowerCase() === DEV_EMAIL.toLowerCase());
+                isAdmin = (username.toLowerCase() === DEV_USERNAME.toLowerCase());
+
+                // metadata 로드
+                if (currentUser.user_metadata) {
+                    userData.coins = currentUser.user_metadata.coins || 0;
+                    userData.titles = currentUser.user_metadata.titles || ["🐣 초보"];
+                    userData.equippedTitle = currentUser.user_metadata.equippedTitle || "🐣 초보";
+                    userData.lastFreeDate = currentUser.user_metadata.lastFreeDate || "";
+                }
 
                 loggedOutUI.style.display = "none";
                 loggedInUI.style.display = "block";
-                userDisplay.textContent = nickname;
+                userDisplay.textContent = username;
+                titleTag.textContent = `[${userData.equippedTitle}]`;
                 adminTag.style.display = isAdmin ? "inline-block" : "none";
                 
-                nicknameInput.value = nickname;
+                openShopBtn.style.display = "block";
+                coinDisplay.textContent = userData.coins;
+                modalCoinDisplay.textContent = userData.coins;
+                document.getElementById('devCoinBtn').style.display = isAdmin ? "inline-block" : "none";
+
                 startBtn.disabled = false;
                 startBtn.textContent = "게임 시작하기 🚀";
             } else {
@@ -519,17 +679,136 @@
                 isAdmin = false;
                 loggedOutUI.style.display = "block";
                 loggedInUI.style.display = "none";
-                adminTag.style.display = "none";
-                nicknameInput.value = "";
+                openShopBtn.style.display = "none";
                 startBtn.disabled = true;
                 startBtn.textContent = "로그인 후 시작 가능 🚀";
             }
             fetchRankings();
         }
 
+        async function saveUserData() {
+            if (!currentUser) return;
+            await supabaseClient.auth.updateUser({
+                data: userData
+            });
+            coinDisplay.textContent = userData.coins;
+            modalCoinDisplay.textContent = userData.coins;
+            titleTag.textContent = `[${userData.equippedTitle}]`;
+        }
+
+        // 상점 모달 제어
+        function openShopModal() {
+            renderShopTitles();
+            document.getElementById('shopModal').classList.add('active');
+        }
+        function closeShopModal() {
+            document.getElementById('shopModal').classList.remove('active');
+        }
+        function switchShopTab(tab) {
+            document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (tab === 'titles') {
+                document.getElementById('shopTabTitle').classList.add('active');
+                document.getElementById('shopTitlesView').style.display = 'block';
+                document.getElementById('shopFreeView').style.display = 'none';
+            } else {
+                document.getElementById('shopTabFree').classList.add('active');
+                document.getElementById('shopTitlesView').style.display = 'none';
+                document.getElementById('shopFreeView').style.display = 'block';
+            }
+        }
+
+        function renderShopTitles() {
+            const container = document.getElementById('shopTitlesView');
+            let html = "";
+
+            availableTitles.forEach(item => {
+                const isOwned = userData.titles.includes(item.name);
+                const isEquipped = userData.equippedTitle === item.name;
+
+                let actionBtn = "";
+                if (isEquipped) {
+                    actionBtn = `<span style="color:#00ffff; font-size:11px; font-weight:bold;">장착 중</span>`;
+                } else if (isOwned) {
+                    actionBtn = `<button class="equip-btn" onclick="equipTitle('${item.name}')">장착하기</button>`;
+                } else {
+                    const canAfford = userData.coins >= item.price;
+                    actionBtn = `<button class="buy-btn" ${canAfford ? '' : 'disabled'} onclick="buyTitle('${item.name}', ${item.price})">구매 (💰${item.price})</button>`;
+                }
+
+                html += `
+                    <div class="shop-item">
+                        <span>🏷️ <strong>${item.name}</strong></span>
+                        ${actionBtn}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function buyTitle(titleName, price) {
+            if (userData.coins < price) return alert("코인이 부족합니다!");
+            userData.coins -= price;
+            userData.titles.push(titleName);
+            userData.equippedTitle = titleName;
+            await saveUserData();
+            renderShopTitles();
+            alert(`🎉 [${titleName}] 칭호를 구매하고 장착했습니다!`);
+        }
+
+        async function equipTitle(titleName) {
+            userData.equippedTitle = titleName;
+            await saveUserData();
+            renderShopTitles();
+        }
+
+        // 오늘의 무료 뽑기 시스템
+        async function claimFreeReward() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastFreeDate === today) {
+                return alert("오늘 이미 무료 보상을 받으셨습니다! 내일 다시 오세요.");
+            }
+
+            userData.lastFreeDate = today;
+            const rand = Math.random() * 100;
+
+            if (rand < 5) { // 5% 확률 희귀 칭호
+                const rareTitle = "🍀 럭키 스타";
+                if (!userData.titles.includes(rareTitle)) {
+                    userData.titles.push(rareTitle);
+                    userData.equippedTitle = rareTitle;
+                    alert("🎉 [5% 대박 당첨!] 전설의 희귀 칭호 '🍀 럭키 스타'를 획득하고 장착했습니다!");
+                } else {
+                    userData.coins += 200;
+                    alert("🎉 [5% 대박 당첨!] 칭호 중복으로 무료 200 코인이 추가 지급되었습니다!");
+                }
+            } else if (rand < 25) { // 20% 확률 고득점 코인
+                userData.coins += 150;
+                alert("🎁 축하합니다! 대박 무료 150 코인을 획득했습니다!");
+            } else { // normal coin
+                const giveCoins = Math.floor(Math.random() * 30) + 30; // 30 ~ 60 코인
+                userData.coins += giveCoins;
+                alert(`🎁 무료 코인 ${giveCoins}개를 획득했습니다!`);
+            }
+
+            await saveUserData();
+            renderShopTitles();
+        }
+
+        // 개발자 코인 조정 기능
+        async function devAdjustCoins() {
+            if (!isAdmin) return;
+            const input = prompt("설정할 코인 금액을 입력하세요:", userData.coins);
+            if (input !== null && !isNaN(input)) {
+                userData.coins = parseInt(input);
+                await saveUserData();
+                renderShopTitles();
+                alert(`개발자 권한: 코인이 ${userData.coins}개로 조정되었습니다.`);
+            }
+        }
+
         async function fetchRankings() {
             const modeNames = { speed: '⚡ 스피드 러시', survive: '🛡️ 서바이벌', sentence: '📜 딥 센텐스', boss: '🐉 보스 레이드' };
-            
             if (!supabaseClient) return;
 
             try {
@@ -551,8 +830,8 @@
                         if (isAdmin) {
                             adminControls = `
                                 <span>
-                                    <button class="admin-action-btn" title="점수 수정" onclick="editRank(${row.id}, '${row.nickname}', ${row.score})">✏️</button>
-                                    <button class="admin-action-btn" title="삭제" onclick="deleteRank(${row.id}, '${row.nickname}')">🗑️</button>
+                                    <button class="admin-action-btn" onclick="editRank(${row.id}, '${row.nickname}', ${row.score})">✏️</button>
+                                    <button class="admin-action-btn" onclick="deleteRank(${row.id}, '${row.nickname}')">🗑️</button>
                                 </span>
                             `;
                         }
@@ -576,26 +855,16 @@
             if (!isAdmin) return;
             if (confirm(`개발자 권한: '${targetName}' 님의 기록을 삭제하시겠습니까?`)) {
                 const { error } = await supabaseClient.from('rankings').delete().eq('id', id);
-                if (error) {
-                    alert("삭제 실패: " + error.message);
-                } else {
-                    alert("기록이 성공적으로 삭제되었습니다.");
-                    fetchRankings();
-                }
+                if (!error) { fetchRankings(); alert("삭제되었습니다."); }
             }
         }
 
         async function editRank(id, oldName, oldScore) {
             if (!isAdmin) return;
-            const newScore = prompt(`'${oldName}' 님의 점수를 수정합니다:`, oldScore);
+            const newScore = prompt(`'${oldName}' 님의 점수 수정:`, oldScore);
             if (newScore !== null && !isNaN(newScore)) {
                 const { error } = await supabaseClient.from('rankings').update({ score: parseInt(newScore) }).eq('id', id);
-                if (error) {
-                    alert("수정 실패: " + error.message);
-                } else {
-                    alert("점수가 수정되었습니다.");
-                    fetchRankings();
-                }
+                if (!error) { fetchRankings(); alert("수정되었습니다."); }
             }
         }
 
@@ -610,7 +879,7 @@
             if (!currentUser) return alert("로그인이 필요합니다.");
 
             const modeNames = { speed: '스피드 러시', survive: '서바이벌 모드', sentence: '딥 센텐스', boss: '보스 레이드' };
-            welcomePlayer.textContent = `${nickname} | ${modeNames[selectedMode]}`;
+            welcomePlayer.textContent = `[${userData.equippedTitle}] ${username} | ${modeNames[selectedMode]}`;
             
             if (selectedMode === 'survive') {
                 statLabel.textContent = "단어 제한 시간";
@@ -712,16 +981,21 @@
             inputBox.value = "";
             wordDisplay.textContent = "GAME OVER 🛑";
 
+            // 코인 보상 계산 (기본 획득 + 콤보 보너스)
+            const earnedCoins = Math.floor(score / 8) + Math.floor(combo * 1.5);
+            userData.coins += earnedCoins;
+            await saveUserData();
+
             if (supabaseClient) {
                 try {
-                    const { error } = await supabaseClient
+                    const fullPlayerName = `[${userData.equippedTitle}] ${username}`;
+                    await supabaseClient
                         .from('rankings')
-                        .insert([{ nickname: nickname, score: score, mode: selectedMode }]);
+                        .insert([{ nickname: fullPlayerName, score: score, mode: selectedMode }]);
 
-                    if (error) throw error;
-                    alert(`게임 종료! ${nickname}님의 점수(${score}점)가 수파베이스에 저장되었습니다! ⚡`);
+                    alert(`게임 종료!\n최종 점수: ${score}점\n💰 ${earnedCoins} 코인을 획득했습니다!`);
                 } catch (e) {
-                    alert(`게임 종료! 최종 점수: ${score}점`);
+                    alert(`게임 종료! 점수: ${score}점 | 💰 +${earnedCoins} 코인`);
                 }
             }
 
