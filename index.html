@@ -65,19 +65,16 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        h1 {
-            font-size: 26px;
-            margin-bottom: 5px;
-            background: linear-gradient(45deg, #ff0055, #00ffff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: titlePulse 3s infinite alternate;
+        /* 로고 스타일링 */
+        .logo-wrapper {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto 5px auto;
         }
-        @keyframes titlePulse {
-            0% { filter: drop-shadow(0 0 2px rgba(255,0,85,0.4)); }
-            100% { filter: drop-shadow(0 0 10px rgba(0,255,255,0.7)); }
+        .logo-wrapper svg {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         p {
@@ -298,7 +295,55 @@
     <div class="container">
         <!-- 홈 화면 -->
         <div id="homeScreen" class="screen active">
-            <h1>⚡ NEON TYPER ⚡</h1>
+            
+            <!-- ⚡ 네온 로고 영역 -->
+            <div class="logo-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 180" width="100%">
+                    <defs>
+                        <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="6" result="blur1" />
+                            <feGaussianBlur stdDeviation="12" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        <filter id="glow-pink" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="6" result="blur1" />
+                            <feGaussianBlur stdDeviation="12" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        <linearGradient id="grad-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00ffff" />
+                            <stop offset="100%" stop-color="#0088ff" />
+                        </linearGradient>
+                        <linearGradient id="grad-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff007f" />
+                            <stop offset="100%" stop-color="#ff0055" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- 심볼 아이콘 -->
+                    <g transform="translate(25, 25)">
+                        <rect x="0" y="0" width="120" height="120" rx="26" fill="rgba(0, 255, 255, 0.03)" stroke="url(#grad-cyan)" stroke-width="4" filter="url(#glow-cyan)" />
+                        <rect x="10" y="10" width="100" height="100" rx="18" fill="none" stroke="rgba(255, 0, 127, 0.4)" stroke-width="2" />
+                        <path d="M 70 20 L 35 68 L 60 68 L 45 100 L 85 50 L 60 50 Z" fill="url(#grad-pink)" stroke="#ff007f" stroke-width="2" filter="url(#glow-pink)" />
+                    </g>
+
+                    <!-- 텍스트 로고 -->
+                    <text x="170" y="95" font-family="'Pretendard', sans-serif" font-size="52" font-weight="900" fill="url(#grad-cyan)" filter="url(#glow-cyan)" letter-spacing="4">NEON</text>
+                    <text x="345" y="95" font-family="'Pretendard', sans-serif" font-size="52" font-weight="900" fill="url(#grad-pink)" filter="url(#glow-pink)" letter-spacing="4">TYPER</text>
+                    <text x="172" y="132" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#a0a0c0" letter-spacing="5">HIGH SPEED TYPING ATTACK</text>
+                    <line x1="170" y1="148" x2="530" y2="148" stroke="url(#grad-pink)" stroke-width="3" stroke-linecap="round" filter="url(#glow-pink)" />
+                    <circle cx="530" cy="148" r="4" fill="#00ffff" filter="url(#glow-cyan)" />
+                </svg>
+            </div>
+
             <p>명예의 전당 TOP 3 챌린지</p>
 
             <!-- 이메일 인증 관리 영역 -->
@@ -355,7 +400,7 @@
     <script>
         const SUPABASE_URL = "https://kfpnmxgzqvcurmxjyyga.supabase.co";
         const SUPABASE_KEY = "sb_publishable_IiOTW-J-iPtliC9yKN8lSg_BqkGo_DW";
-        const DEV_EMAIL = "y4794341@gmail.com"; // 개발자 전용 계정
+        const DEV_EMAIL = "y4794341@gmail.com"; 
         
         let supabaseClient = null;
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -412,7 +457,6 @@
         const statLabel = document.getElementById('statLabel');
         const statValueEl = document.getElementById('statValue');
 
-        // --- 이메일 로그인 / 회원가입 기능 ---
         async function handleLogin() {
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -435,7 +479,7 @@
             if (error) {
                 alert("회원가입 실패: " + error.message);
             } else {
-                alert("회원가입 성공! 바로 로그인하여 이용해 주세요.");
+                alert("회원가입 성공! 로그인하여 게임을 이용해 주세요.");
             }
         }
 
@@ -458,7 +502,7 @@
             if (session && session.user) {
                 currentUser = session.user;
                 const userEmail = currentUser.email;
-                nickname = userEmail.split('@')[0]; // 이메일 아이디 부분을 닉네임으로 고정
+                nickname = userEmail.split('@')[0];
 
                 isAdmin = (userEmail.toLowerCase() === DEV_EMAIL.toLowerCase());
 
@@ -483,14 +527,12 @@
             fetchRankings();
         }
 
-        // --- 명예의 전당 TOP 3 & 관리자 기능 ---
         async function fetchRankings() {
             const modeNames = { speed: '⚡ 스피드 러시', survive: '🛡️ 서바이벌', sentence: '📜 딥 센텐스', boss: '🐉 보스 레이드' };
             
             if (!supabaseClient) return;
 
             try {
-                // 상위 3개만 정확하게 조회 (Top 3 제한)
                 const { data, error } = await supabaseClient
                     .from('rankings')
                     .select('id, nickname, score')
@@ -530,7 +572,6 @@
             }
         }
 
-        // 관리자 전용 삭제 기능
         async function deleteRank(id, targetName) {
             if (!isAdmin) return;
             if (confirm(`개발자 권한: '${targetName}' 님의 기록을 삭제하시겠습니까?`)) {
@@ -544,7 +585,6 @@
             }
         }
 
-        // 관리자 전용 수정 기능
         async function editRank(id, oldName, oldScore) {
             if (!isAdmin) return;
             const newScore = prompt(`'${oldName}' 님의 점수를 수정합니다:`, oldScore);
@@ -693,4 +733,4 @@
     </script>
 
 </body>
-</html>   
+</html>
