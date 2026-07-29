@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네온 타입 어택 - NEON TYPER</title>
+    <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #ff0055;
+            --container-glow: rgba(0, 255, 255, 0.25);
+            --box-glow-color: #00ffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', sans-serif;
+        }
+        body {
+            background-color: #070710;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,0,85,0.15) 0%, transparent 70%);
+            top: 10%;
+            left: 20%;
+            z-index: -1;
+            animation: floatGlow 8s infinite alternate ease-in-out;
+        }
+        .bg-glow-2 {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0,255,255,0.15) 0%, transparent 70%);
+            bottom: 10%;
+            right: 20%;
+            z-index: -1;
+            animation: floatGlow 10s infinite alternate-reverse ease-in-out;
+        }
+        @keyframes floatGlow {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(40px) scale(1.1); }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(20, 20, 35, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(255, 0, 128, 0.3);
+            border: 2px solid var(--container-glow);
+            max-width: 540px;
+            width: 92%;
+            animation: containerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: border-color 0.4s ease;
+        }
+        @keyframes containerPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .logo-wrapper {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto 5px auto;
+        }
+        .logo-wrapper svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        p {
+            color: #8f8fa8;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #8f8fa8;
+            padding: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.25s;
+        }
+        .tab-btn:hover {
+            border-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: linear-gradient(45deg, #ff0055, #7928ca);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+            transform: scale(1.02);
+        }
+
+        .auth-container {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+        .auth-input:focus {
+            border-color: var(--primary-color);
+        }
+        .auth-btn-group {
+            display: flex;
+            gap: 6px;
+        }
+        .auth-sub-btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-btn { background: var(--primary-color); color: #000; }
+        .signup-btn { background: rgba(255,255,255,0.2); color: #fff; }
+        .auth-sub-btn:hover { filter: brightness(1.2); }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .admin-badge {
+            background: #ff0055;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .logout-btn {
+            background: rgba(255, 0, 85, 0.2);
+            border: 1px solid #ff0055;
+            color: #ff0055;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--primary-color), #0070f3);
+            border: none;
+            color: #070710;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 20px var(--container-glow);
+            width: 100%;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        .btn:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        #score { color: var(--primary-color); }
+        #statValue { color: #ff0055; }
+        #combo { color: #ffe600; }
+        
+        .word-display {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #ff0055;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .ranking-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 140px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .ranking-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #ff0055;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 4px;
+        }
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 6px;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+        }
+
+        .shop-btn {
+            background: linear-gradient(45deg, #ffe600, #ff0055);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(255, 230, 0, 0.4);
+            width: 100%;
+        }
+        .shop-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .shop-modal.active {
+            display: flex;
+        }
+        .shop-content {
+            background: #141423;
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 20px;
+            width: 92%;
+            max-width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 30px var(--container-glow);
+        }
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .shop-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 15px;
+        }
+        .shop-tab-btn {
+            flex: 1;
+            padding: 7px 4px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #aaa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .shop-tab-btn.active {
+            background: var(--primary-color);
+            color: #000;
+        }
+        
+        /* -------------------------------------------------------------
+           🎯 칭호 빙고판 형태 (3열 그리드) 스타일
+        ------------------------------------------------------------- */
+        .title-bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .title-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 85px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .title-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        .title-card-btn {
+            width: 100%;
+            margin-top: 6px;
+            padding: 4px 0;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .shop-item {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .box-card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--primary-color);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .box-card h4 {
+            color: #ffe600;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .prob-table {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-size: 11px;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        .prob-table div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+        }
+        .box-btn-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .buy-btn {
+            flex: 1;
+            background: var(--primary-color);
+            color: #000;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .buy-btn:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+        }
+        .frag-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #00ff80, #00ffff);
+            color: #000;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+            box-shadow: 0 0 8px rgba(0,255,128,0.4);
+        }
+        .frag-btn:disabled {
+            background: #333;
+            color: #666;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .equip-btn {
+            background: #ff0055;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .buff-badge {
+            background: rgba(255, 230, 0, 0.15);
+            border: 1px solid #ffe600;
+            color: #ffe600;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 6px;
+            display: inline-block;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(5, 7, 12, 0.92);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 90%; max-width: 400px; }
+
+        .light-burst {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--box-glow-color) 0%, transparent 70%);
+            opacity: 0;
+            transform: scale(0.2);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .light-burst.active {
+            opacity: 0.7;
+            transform: scale(1.5);
+            animation: rotateBurst 8s linear infinite;
+        }
+        @keyframes rotateBurst {
+            from { transform: scale(1.5) rotate(0deg); }
+            to { transform: scale(1.5) rotate(360deg); }
+        }
+
+        .anim-box { width: 140px; height: 140px; margin-bottom: 15px; z-index: 2; }
+        
+        .anim-box.shake-100 { animation: boxShake100 0.15s infinite alternate; }
+        .anim-box.shake-500 { animation: boxShake500 0.1s infinite alternate; }
+        .anim-box.shake-1000 { animation: boxShake1000 0.07s infinite alternate; }
+
+        @keyframes boxShake100 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-4px, 3px) rotate(-3deg); }
+        }
+        @keyframes boxShake500 {
+            0% { transform: translate(-6px, 4px) rotate(-5deg); }
+            100% { transform: translate(6px, -4px) rotate(5deg); }
+        }
+        @keyframes boxShake1000 {
+            0% { transform: translate(-10px, 8px) rotate(-10deg) scale(1.05); }
+            100% { transform: translate(10px, -8px) rotate(10deg) scale(1.15); }
+        }
+
+        .anim-box.open-pop { animation: boxPop 0.4s forwards ease-out; }
+
+        @keyframes boxPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .result-card {
+            background: rgba(20, 24, 36, 0.95);
+            border: 2px solid var(--box-glow-color);
+            border-radius: 20px;
+            padding: 25px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 0 35px var(--box-glow-color);
+            transform: scale(0.5);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 3;
+            width: 100%;
+        }
+        .result-card.show { transform: scale(1); opacity: 1; }
+
+        .reward-item {
+            background: rgba(0,0,0,0.4);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 13px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .reward-item.rare { border-left-color: #ff0055; background: rgba(255, 0, 85, 0.15); }
+
+        /* -------------------------------------------------------------
+           ✨ 칭호 스타일
+        ------------------------------------------------------------- */
+        .title-badge {
+            display: inline-block;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            vertical-align: middle;
+            margin-right: 4px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .title-rookie { color: #a0a0c0; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.05); }
+        .title-god {
+            background: linear-gradient(90deg, #ffe600, #ffffff, #ffe600, #ff8800);
+            background-size: 200% auto;
+            color: #000;
+            box-shadow: 0 0 15px #ffe600, 0 0 25px #ffffff;
+            animation: goldShimmer 1.5s linear infinite, pulseGlow 1s ease-in-out infinite alternate;
+        }
+        .title-immortal {
+            background: linear-gradient(135deg, #00ff80, #00ffff, #00ff80);
+            background-size: 200% auto;
+            color: #000;
+            box-shadow: 0 0 14px #00ff80;
+            animation: goldShimmer 2s linear infinite;
+        }
+        .title-transcendent {
+            background: linear-gradient(90deg, #ff0055, #ffe600, #00ffff, #aa00ff, #ff0055);
+            background-size: 300% auto;
+            color: #fff;
+            text-shadow: 0 0 4px #000;
+            border: 1px solid #fff;
+            box-shadow: 0 0 18px #ff00ff;
+            animation: goldShimmer 1.2s linear infinite;
+        }
+        .title-abyss { background: #aa00ff; color: #fff; box-shadow: 0 0 10px #aa00ff, inset 0 0 5px #fff; }
+        .title-prob { background: linear-gradient(45deg, #ffe600, #ff5500); color: #000; box-shadow: 0 0 10px #ffe600; }
+        .title-fate { background: linear-gradient(90deg, #ff0055, #ff4400); color: #fff; box-shadow: 0 0 12px #ff0055; }
+        .title-pioneer { background: #00ffff; color: #000; box-shadow: 0 0 8px #00ffff; }
+        .title-chaser { background: #0088ff; color: #fff; box-shadow: 0 0 8px #0088ff; }
+        .title-bridge { background: #444466; color: #00ffff; border: 1px solid #00ffff; }
+
+        .title-golden-soul { background: linear-gradient(45deg, #ffe600, #ffffff); color: #000; box-shadow: 0 0 12px #ffe600; font-weight: bold; }
+        .title-light-runner { background: linear-gradient(90deg, #00ffff, #00ff80); color: #000; box-shadow: 0 0 12px #00ffff; }
+        .title-wealth-lord { background: linear-gradient(135deg, #ff0055, #ffe600); color: #fff; text-shadow: 0 0 3px #000; box-shadow: 0 0 15px #ff0055; }
+        .title-galaxy-apex { background: linear-gradient(90deg, #aa00ff, #0088ff, #00ffff); color: #fff; box-shadow: 0 0 15px #aa00ff; }
+        .title-all-watcher { background: #ffffff; color: #000; box-shadow: 0 0 20px #ffffff, 0 0 10px #00ffff; border: 1px solid #000; animation: pulseGlow 0.8s infinite alternate; }
+
+        /* 신규 뽑기 전용 칭호 스타일 */
+        .title-time-ruler { background: linear-gradient(135deg, #00ffff, #aa00ff); color: #fff; box-shadow: 0 0 15px #aa00ff; }
+        .title-golden-lord { background: linear-gradient(90deg, #ffe600, #ff8800); color: #000; box-shadow: 0 0 15px #ffe600; }
+        .title-speed-myth { background: linear-gradient(45deg, #00ff80, #ffe600); color: #000; box-shadow: 0 0 12px #00ff80; }
+        .title-dimension-prophet { background: #7928ca; color: #00ffff; border: 1px solid #00ffff; box-shadow: 0 0 10px #7928ca; }
+        .title-night-guardian { background: linear-gradient(180deg, #101030, #0088ff); color: #fff; border: 1px solid #0088ff; }
+
+        @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        @keyframes pulseGlow { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+
+        /* ===== 1:1 PvP ===== */
+        .pvp-btn-main{width:100%;padding:14px;margin-bottom:12px;border:0;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;font-family:inherit;color:#fff;background:linear-gradient(90deg,#ff0055,#aa00ff);box-shadow:0 0 15px rgba(255,0,85,.5)}
+        .pvp-spinner{width:46px;height:46px;border:4px solid rgba(255,255,255,.15);border-top-color:var(--secondary-color);border-radius:50%;margin:25px auto 15px;animation:pvpSpin .8s linear infinite}
+        @keyframes pvpSpin{to{transform:rotate(360deg)}}
+        .pvp-vs-panel{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,0,85,.4);border-radius:12px;padding:12px 18px;margin:15px 0}
+        .pvp-player{text-align:center;flex:1}.pvp-name{font-size:12px;color:#aaa;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .pvp-count{font-size:30px;font-weight:bold}.pvp-player.me .pvp-count{color:var(--primary-color)}.pvp-player.opp .pvp-count{color:var(--secondary-color)}
+        .pvp-timer{font-size:26px;font-weight:bold;color:#ffe600;min-width:60px;text-align:center}
+        .pvp-result-title{font-size:30px;margin:20px 0 8px}.pvp-win{color:#00ff88}.pvp-lose{color:#ff0055}.pvp-draw{color:#ffe600}
+
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container" id="mainContainer">
+        <!-- 메인 홈 화면 -->
+        <div id="homeScreen" class="screen active">
+            <div class="logo-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 180" width="100%">
+                    <defs>
+                        <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="6" result="blur1" />
+                            <feGaussianBlur stdDeviation="12" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        <filter id="glow-pink" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="6" result="blur1" />
+                            <feGaussianBlur stdDeviation="12" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        <linearGradient id="grad-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00ffff" />
+                            <stop offset="100%" stop-color="#0088ff" />
+                        </linearGradient>
+                        <linearGradient id="grad-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff007f" />
+                            <stop offset="100%" stop-color="#ff0055" />
+                        </linearGradient>
+                    </defs>
+
+                    <g transform="translate(25, 25)">
+                        <rect x="0" y="0" width="120" height="120" rx="26" fill="rgba(0, 255, 255, 0.03)" stroke="url(#grad-cyan)" stroke-width="4" filter="url(#glow-cyan)" />
+                        <rect x="10" y="10" width="100" height="100" rx="18" fill="none" stroke="rgba(255, 0, 127, 0.4)" stroke-width="2" />
+                        <path d="M 70 20 L 35 68 L 60 68 L 45 100 L 85 50 L 60 50 Z" fill="url(#grad-pink)" stroke="#ff007f" stroke-width="2" filter="url(#glow-pink)" />
+                    </g>
+
+                    <text x="170" y="95" font-family="'Pretendard', sans-serif" font-size="52" font-weight="900" fill="url(#grad-cyan)" filter="url(#glow-cyan)" letter-spacing="4">NEON</text>
+                    <text x="345" y="95" font-family="'Pretendard', sans-serif" font-size="52" font-weight="900" fill="url(#grad-pink)" filter="url(#glow-pink)" letter-spacing="4">TYPER</text>
+                    <text x="172" y="132" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#a0a0c0" letter-spacing="5">HIGH SPEED TYPING ATTACK</text>
+                    <line x1="170" y1="148" x2="530" y2="148" stroke="url(#grad-pink)" stroke-width="3" stroke-linecap="round" filter="url(#glow-pink)" />
+                    <circle cx="530" cy="148" r="4" fill="#00ffff" filter="url(#glow-cyan)" />
+                </svg>
+            </div>
+
+            <p>명예의 전당 TOP 3 챌린지</p>
+
+            <div class="auth-container">
+                <div id="loggedOutUI">
+                    <input type="text" id="usernameInput" class="auth-input" placeholder="닉네임 입력" autocomplete="off">
+                    <input type="password" id="passwordInput" class="auth-input" placeholder="비밀번호 입력">
+                    <div class="auth-btn-group">
+                        <button class="auth-sub-btn login-btn" onclick="handleLogin()">로그인</button>
+                        <button class="auth-sub-btn signup-btn" onclick="handleSignUp()">회원가입</button>
+                    </div>
+                </div>
+                <div id="loggedInUI" style="display: none;">
+                    <div class="user-profile">
+                        <span>
+                            <span id="titleTag"></span>
+                            👤 <strong id="userDisplay">사용자</strong>
+                            <span id="adminTag" class="admin-badge" style="display:none;">DEVELOPER</span>
+                        </span>
+                        <button class="logout-btn" onclick="handleLogout()">로그아웃</button>
+                    </div>
+                    <div id="activeBuffBanner" class="buff-badge" style="display:none;">⚡ 1.5배 코인 부스트 진행 중</div>
+                </div>
+            </div>
+
+            <button class="shop-btn" id="openShopBtn" onclick="openShopModal()" style="display: none;">🛍️ 네온 상점 & 확률형 상자 (💰 <span id="coinDisplay">0</span>)</button>
+
+            <div class="ranking-box" id="rankingView">
+                <div class="ranking-title">🏆 명예의 전당 TOP 3 로딩 중...</div>
+            </div>
+
+            <div class="tab-grid">
+                <button class="tab-btn active" id="mode-speed" onclick="setMode('speed')">⚡ 스피드 러시<br><span style="font-size:10px; color:#aaa;">30초 극한 연타</span></button>
+                <button class="tab-btn" id="mode-survive" onclick="setMode('survive')">🛡️ 서바이벌<br><span style="font-size:10px; color:#aaa;">3초 제한 타임어택</span></button>
+                <button class="tab-btn" id="mode-sentence" onclick="setMode('sentence')">📜 딥 센텐스<br><span style="font-size:10px; color:#aaa;">명언 문장 타자</span></button>
+                <button class="tab-btn" id="mode-boss" onclick="setMode('boss')">🐉 보스 레이드<br><span style="font-size:10px; color:#aaa;">고난도 단어 격파</span></button>
+            </div>
+
+            <button class="pvp-btn-main" id="pvpBtn" onclick="startMatchmaking()">⚔️ 1:1 PvP 대결 매칭 시작<br><span style="font-size:10px;opacity:.8">20초 동안 단어를 더 많이 치는 사람이 승리!</span></button>
+
+            <button class="btn" id="startBtn" onclick="goToGame()" disabled>로그인 후 시작 가능 🚀</button>
+        </div>
+
+        <!-- 게임 플레이 화면 -->
+        <div id="gameScreen" class="screen">
+            <h1 id="welcomePlayer" style="font-size: 16px; color: var(--primary-color);">PLAYER</h1>
+            <p id="modeDesc">첫 단어를 입력하는 순간 타이머가 시작됩니다!</p>
+            
+            <div class="info-panel">
+                <div>점수: <span id="score">0</span></div>
+                <div>콤보: <span id="combo">0</span>🔥</div>
+                <div><span id="statLabel">시간</span>: <span id="statValue">30</span></div>
+            </div>
+
+            <div id="wordDisplay" class="word-display">준비...</div>
+            
+            <input type="text" id="inputBox" class="input-box" placeholder="첫 글자를 입력하세요" autocomplete="off">
+            <button class="btn" style="background: rgba(255,255,255,0.1); color: #fff; box-shadow: none; font-size: 13px; padding: 10px;" onclick="goToHome()">메인 메뉴로 가기</button>
+        </div>
+        <div id="pvpScreen" class="screen">
+            <h1 style="font-size:18px;color:var(--secondary-color)">⚔️ 1:1 PvP 대결</h1>
+            <div id="pvpStatusBox"><div class="pvp-spinner"></div><p id="pvpStatusText" style="color:#ccc;margin-bottom:20px">상대를 찾는 중...</p><button class="btn" style="background:rgba(255,255,255,.1);color:#fff;box-shadow:none;font-size:13px;padding:10px" onclick="exitPvp()">매칭 취소</button></div>
+            <div id="pvpBattleBox" style="display:none">
+                <div class="pvp-vs-panel"><div class="pvp-player me"><div class="pvp-name" id="pvpMyNameEl">나</div><div class="pvp-count" id="pvpMyWordsEl">0</div></div><div class="pvp-timer" id="pvpTimerEl">20</div><div class="pvp-player opp"><div class="pvp-name" id="pvpOppNameEl">상대</div><div class="pvp-count" id="pvpOppWordsEl">0</div></div></div>
+                <div id="pvpWordDisplay" class="word-display">준비...</div><input type="text" id="pvpInputBox" class="input-box" placeholder="카운트다운 후 입력 시작!" autocomplete="off" disabled>
+            </div>
+            <div id="pvpResultBox" style="display:none;text-align:center"><h2 class="pvp-result-title" id="pvpResultTitle"></h2><p id="pvpResultDesc" style="color:#ccc;margin-bottom:20px"></p><button class="btn" style="margin-bottom:10px" onclick="pvpRematch()">🔁 다시 매칭하기</button><button class="btn" style="background:rgba(255,255,255,.1);color:#fff;box-shadow:none;font-size:13px;padding:10px" onclick="exitPvp()">메인 메뉴로 가기</button></div>
+        </div>
+
+    </div>
+
+    <!-- 네온 상점 모달 -->
+    <div class="shop-modal" id="shopModal">
+        <div class="shop-content">
+            <div class="shop-header">
+                <h3>🛍️ 네온 상점 & 확률형 상자</h3>
+                <span style="cursor:pointer; font-size:20px;" onclick="closeShopModal()">✖</span>
+            </div>
+            
+            <div style="font-size:13px; margin-bottom:12px; color:#ffe600;">
+                보유 코인: 💰 <strong id="modalCoinDisplay">0</strong>
+                <button id="devCoinBtn" onclick="devAdjustCoins()" style="display:none; margin-left:8px; background:#ff0055; color:#fff; border:none; border-radius:4px; padding:2px 6px; font-size:10px; cursor:pointer;">⚙️ [개발자] 코인 조절</button>
+            </div>
+
+            <div class="shop-tabs">
+                <button class="shop-tab-btn active" id="shopTabBox" onclick="switchShopTab('boxes')">📦 행운 상자</button>
+                <button class="shop-tab-btn" id="shopTabTitle" onclick="switchShopTab('titles')">🏷️ 칭호 상점</button>
+                <button class="shop-tab-btn" id="shopTabTheme" onclick="switchShopTab('themes')">🎨 네온 테마</button>
+                <button class="shop-tab-btn" id="shopTabFree" onclick="switchShopTab('free')">🎁 출석 보상</button>
+            </div>
+
+            <div id="shopBoxesView"></div>
+            <div id="shopTitlesView" style="display:none;"></div>
+            <div id="shopThemesView" style="display:none;"></div>
+            <div id="shopFreeView" style="display:none; text-align:center; padding:10px 0;">
+                <p style="color:#aaa; font-size:12px; margin-bottom:15px;">하루에 한 번! 30~80 무료 코인 또는 5% 확률의 '🎲 [확률의 신]' 칭호를 얻으세요.</p>
+                <button class="btn" id="claimFreeBtn" onclick="claimFreeReward()" style="width: auto; padding: 10px 25px;">🎁 오늘의 출석 보상 받기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상자 애니메이션 모달 -->
+    <div class="modal-overlay" id="boxOpenModal">
+        <div class="modal-content-box">
+            <div class="light-burst" id="lightBurst"></div>
+            <div class="anim-box" id="animBox">
+                <svg id="boxSvg" viewBox="0 0 100 100" width="100%" height="100%">
+                    <path id="boxPath1" d="M15 35 L50 15 L85 35 L85 75 L50 95 L15 75 Z" fill="#00ffff" stroke="#0088ff" stroke-width="3"/>
+                    <path id="boxPath2" d="M15 35 L50 55 L85 35" fill="none" stroke="#0088ff" stroke-width="3"/>
+                    <path id="boxPath3" d="M50 55 L50 95" fill="none" stroke="#0088ff" stroke-width="3"/>
+                    <circle id="boxCircle" cx="50" cy="55" r="8" fill="#ffffff" stroke="#00ffff" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="result-card" id="resultCard">
+                <h3 id="resultTitle" style="color:#ffe600; font-size:18px;">🎁 상자 개봉 성공!</h3>
+                <div class="reward-list" id="rewardList" style="width:100%; margin:10px 0;"></div>
+                <button class="buy-btn" style="width:100%; padding:10px; font-size:13px; font-weight:bold;" onclick="closeBoxOpenModal()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://kfpnmxgzqvcurmxjyyga.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_IiOTW-J-iPtliC9yKN8lSg_BqkGo_DW";
+        const DEV_USERNAME = "dragonbin1"; 
+        
+        let supabaseClient = null;
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        /* 💡 100개 단어 대거 추가된 wordPool (총 120개) */
+        const wordPool = [
+            "사과", "바나나", "포도", "딸기", "수박", "참외", "복숭아", "자두", "감귤", "토마토", 
+            "하늘", "바다", "구름", "별빛", "달빛", "태양", "산맥", "강물", "나무", "꽃잎",
+            // 추가된 100단어
+            "호랑이", "사자", "기린", "코끼리", "돌고래", "펭귄", "독수리", "올빼미", "다람쥐", "고양이",
+            "강아지", "여우", "늑대", "북극곰", "표범", "판다", "캥거루", "은하수", "유성우", "사막",
+            "오아시스", "빙하", "폭포", "노을", "새벽", "바람", "천둥", "번개", "무지개", "단풍",
+            "눈꽃", "이슬", "파도", "아침", "저녁", "우주선", "행성", "위성", "초신성", "블랙홀",
+            "컴퓨터", "키보드", "마우스", "모니터", "네트워크", "알고리즘", "데이터", "서버", "프로그램", "코딩",
+            "스마트폰", "로봇", "드론", "인공지능", "메모리", "그래픽", "사이버", "디지털", "픽셀", "벡터",
+            "피아노", "바이올린", "기타", "드럼", "플루트", "멜로디", "하모니", "리듬", "클래식", "재즈",
+            "미술관", "도서관", "박물관", "극장", "스튜디오", "나비", "꿀벌", "장미", "해바라기", "튤립",
+            "자전거", "자동차", "비행기", "잠수함", "기차", "헬기", "나침반", "지하철", "고속도로", "항구",
+            "커피", "초콜릿", "아이스크림", "케이크", "마카롱", "샌드위치", "파스타", "피자", "카레", "샐러드"
+        ];
+
+        const sentencePool = ["인생은 속도가 아니라 방향이다.", "고통이 없으면 얻는 것도 없다.", "오늘 할 수 있는 일을 내일로 미루지 마라.", "자신을 믿어라. 길은 반드시 열린다."];
+        const bossPool = ["하이퍼리얼리즘인공지능시스템", "사이버네틱스시퀀셜알고리즘", "일렉트로닉스볼텍스프로토콜", "디지털트랜스포메이션엔지니어"];
+
+        /* 칭호 데이터 (뽑기 전용 칭호 대거 추가) */
+        const ALL_TITLES = [
+            // 💰 코인으로 구매 가능한 상점 전용 칭호
+            { name: "⚡ [시공의 개척자]", rarity: "상점전용", class: "title-pioneer", isShopBuyable: true, price: 400 },
+            { name: "🏃 [기적의 체이서]", rarity: "상점전용", class: "title-chaser", isShopBuyable: true, price: 800 },
+            { name: "🔥 [운명을 비웃는 자]", rarity: "상점전용", class: "title-fate", isShopBuyable: true, price: 1500 },
+            { name: "💎 [황금빛 영혼]", rarity: "상점전용", class: "title-golden-soul", isShopBuyable: true, price: 2500 },
+            { name: "⚡ [광속의 질주자]", rarity: "상점전용", class: "title-light-runner", isShopBuyable: true, price: 4000 },
+            { name: "👑 [부의 지배자]", rarity: "상점전용", class: "title-wealth-lord", isShopBuyable: true, price: 7000 },
+            { name: "🌌 [은하의 정점]", rarity: "상점전용", class: "title-galaxy-apex", isShopBuyable: true, price: 12000 },
+            { name: "👁️ [만물의 관찰자]", rarity: "상점전용", class: "title-all-watcher", isShopBuyable: true, price: 20000 },
+
+            // 📦 상자/출석 전용 뽑기 칭호 (신규 칭호 대거 추가)
+            { name: "✨ [신의 한수]", rarity: "전설", class: "title-god", isShopBuyable: false, price: 0 },
+            { name: "🌌 [시공의 지배자]", rarity: "전설", class: "title-time-ruler", isShopBuyable: false, price: 0 },
+            { name: "👑 [황금빛 군주]", rarity: "전설", class: "title-golden-lord", isShopBuyable: false, price: 0 },
+            { name: "⚡ [광속의 신화]", rarity: "전설", class: "title-speed-myth", isShopBuyable: false, price: 0 },
+            { name: "⚔️ [불멸의 서약]", rarity: "전설", class: "title-immortal", isShopBuyable: false, price: 0 },
+            { name: "👑 [초월적 존재]", rarity: "전설", class: "title-transcendent", isShopBuyable: false, price: 0 },
+            { name: "🔮 [차원의 예언자]", rarity: "희귀", class: "title-dimension-prophet", isShopBuyable: false, price: 0 },
+            { name: "🌙 [밤하늘의 수호자]", rarity: "희귀", class: "title-night-guardian", isShopBuyable: false, price: 0 },
+            { name: "🔮 [심연의 관조자]", rarity: "희귀", class: "title-abyss", isShopBuyable: false, price: 0 },
+            { name: "🎲 [확률의 신]", rarity: "희귀", class: "title-prob", isShopBuyable: false, price: 0 },
+            { name: "🌑 [멸망의 징검다리]", rarity: "일반", class: "title-bridge", isShopBuyable: false, price: 0 }
+        ];
+
+        const availableThemes = [
+            { id: "default", name: "🩵 기본 시안 네온", price: 0, primary: "#00ffff", secondary: "#ff0055", glow: "rgba(0, 255, 255, 0.25)" },
+            { id: "fire", name: "🔥 네온 파이어", price: 700, primary: "#ff4400", secondary: "#ffe600", glow: "rgba(255, 68, 0, 0.4)" },
+            { id: "emerald", name: "🌿 에메랄드 숲", price: 1500, primary: "#00ff80", secondary: "#00ffff", glow: "rgba(0, 255, 128, 0.4)" },
+            { id: "violet", name: "🍇 볼트 바이올렛", price: 3000, primary: "#aa00ff", secondary: "#ff00ff", glow: "rgba(170, 0, 255, 0.4)" }
+        ];
+
+        let currentUser = null;
+        let username = "";
+        let isAdmin = false;
+        let selectedMode = 'speed'; 
+        let score = 0;
+        let combo = 0;
+        let statValue = 30; 
+        let isPlaying = false;
+        let isStarted = false;
+        let gameInterval;
+        let currentWord = "";
+
+        let userData = {
+            coins: 0,
+            titles: ["🐣 초보"],
+            equippedTitle: "🐣 초보",
+            themes: ["default"],
+            equippedTheme: "default",
+            lastFreeDate: "",
+            coinBuffUntil: 0,
+            fragments: { box500: 0, box1000: 0 }
+        };
+
+        const homeScreen = document.getElementById('homeScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const rankingView = document.getElementById('rankingView');
+        const welcomePlayer = document.getElementById('welcomePlayer');
+        const startBtn = document.getElementById('startBtn');
+        const loggedOutUI = document.getElementById('loggedOutUI');
+        const loggedInUI = document.getElementById('loggedInUI');
+        const userDisplay = document.getElementById('userDisplay');
+        const adminTag = document.getElementById('adminTag');
+        const titleTag = document.getElementById('titleTag');
+        const openShopBtn = document.getElementById('openShopBtn');
+        const coinDisplay = document.getElementById('coinDisplay');
+        const modalCoinDisplay = document.getElementById('modalCoinDisplay');
+
+        const wordDisplay = document.getElementById('wordDisplay');
+        const inputBox = document.getElementById('inputBox');
+        const scoreEl = document.getElementById('score');
+        const comboEl = document.getElementById('combo');
+        const statLabel = document.getElementById('statLabel');
+        const statValueEl = document.getElementById('statValue');
+
+        function renderTitleBadge(titleName) {
+            const found = ALL_TITLES.find(t => t.name === titleName);
+            let className = found ? found.class : "title-rookie";
+            return `<span class="title-badge ${className}">${titleName}</span>`;
+        }
+
+        function getVirtualEmail(userStr) {
+            return `${userStr.trim().toLowerCase()}@neon.game`;
+        }
+
+        async function handleLogin() {
+            const userStr = document.getElementById('usernameInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            if (!userStr || !password) return alert("닉네임과 비밀번호를 모두 입력하세요.");
+
+            const email = getVirtualEmail(userStr);
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) {
+                alert("로그인 실패: 닉네임 또는 비밀번호를 확인해주세요.");
+            } else {
+                updateUIWithSession(data.session);
+            }
+        }
+
+        async function handleSignUp() {
+            const userStr = document.getElementById('usernameInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            if (!userStr || !password) return alert("닉네임과 비밀번호를 모두 입력하세요.");
+
+            const email = getVirtualEmail(userStr);
+            const { data, error } = await supabaseClient.auth.signUp({ email, password });
+            if (error) {
+                alert("회원가입 실패: " + error.message);
+            } else {
+                alert("🎉 회원가입 성공! [로그인] 버튼을 눌러 게임에 접속해주세요.");
+            }
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            window.location.reload();
+        }
+
+        async function checkAuthState() {
+            if (!supabaseClient) return;
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            updateUIWithSession(session);
+
+            supabaseClient.auth.onAuthStateChange((_event, session) => {
+                updateUIWithSession(session);
+            });
+        }
+
+        function updateUIWithSession(session) {
+            if (session && session.user) {
+                currentUser = session.user;
+                const userEmail = currentUser.email;
+                username = userEmail.split('@')[0];
+
+                isAdmin = (username.toLowerCase() === DEV_USERNAME.toLowerCase());
+
+                if (currentUser.user_metadata) {
+                    userData.coins = currentUser.user_metadata.coins || 0;
+                    userData.titles = currentUser.user_metadata.titles || ["🐣 초보"];
+                    userData.equippedTitle = currentUser.user_metadata.equippedTitle || "🐣 초보";
+                    userData.themes = currentUser.user_metadata.themes || ["default"];
+                    userData.equippedTheme = currentUser.user_metadata.equippedTheme || "default";
+                    userData.lastFreeDate = currentUser.user_metadata.lastFreeDate || "";
+                    userData.coinBuffUntil = currentUser.user_metadata.coinBuffUntil || 0;
+                    userData.fragments = currentUser.user_metadata.fragments || { box500: 0, box1000: 0 };
+                }
+
+                applyTheme(userData.equippedTheme);
+
+                loggedOutUI.style.display = "none";
+                loggedInUI.style.display = "block";
+                userDisplay.textContent = username;
+                titleTag.innerHTML = renderTitleBadge(userData.equippedTitle);
+                adminTag.style.display = isAdmin ? "inline-block" : "none";
+                
+                openShopBtn.style.display = "block";
+                coinDisplay.textContent = userData.coins;
+                modalCoinDisplay.textContent = userData.coins;
+                document.getElementById('devCoinBtn').style.display = isAdmin ? "inline-block" : "none";
+
+                startBtn.disabled = false;
+                startBtn.textContent = "게임 시작하기 🚀";
+
+                checkBuffState();
+            } else {
+                currentUser = null;
+                isAdmin = false;
+                loggedOutUI.style.display = "block";
+                loggedInUI.style.display = "none";
+                openShopBtn.style.display = "none";
+                startBtn.disabled = true;
+                startBtn.textContent = "로그인 후 시작 가능 🚀";
+            }
+            fetchRankings();
+        }
+
+        function checkBuffState() {
+            const banner = document.getElementById('activeBuffBanner');
+            if (userData.coinBuffUntil && userData.coinBuffUntil > Date.now()) {
+                const remMin = Math.ceil((userData.coinBuffUntil - Date.now()) / 1000 / 60);
+                banner.style.display = 'inline-block';
+                banner.textContent = `⚡ 1.5배 코인 부스트 진행 중 (${remMin}분 남음)`;
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        async function saveUserData() {
+            if (!currentUser) return;
+            await supabaseClient.auth.updateUser({ data: userData });
+            coinDisplay.textContent = userData.coins;
+            modalCoinDisplay.textContent = userData.coins;
+            titleTag.innerHTML = renderTitleBadge(userData.equippedTitle);
+            applyTheme(userData.equippedTheme);
+            checkBuffState();
+        }
+
+        function applyTheme(themeId) {
+            const themeObj = availableThemes.find(t => t.id === themeId) || availableThemes[0];
+            document.documentElement.style.setProperty('--primary-color', themeObj.primary);
+            document.documentElement.style.setProperty('--secondary-color', themeObj.secondary);
+            document.documentElement.style.setProperty('--container-glow', themeObj.glow);
+        }
+
+        function openShopModal() {
+            renderShopBoxes();
+            renderShopTitles();
+            renderShopThemes();
+            document.getElementById('shopModal').classList.add('active');
+        }
+        function closeShopModal() {
+            document.getElementById('shopModal').classList.remove('active');
+        }
+
+        function switchShopTab(tab) {
+            document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('shopBoxesView').style.display = 'none';
+            document.getElementById('shopTitlesView').style.display = 'none';
+            document.getElementById('shopThemesView').style.display = 'none';
+            document.getElementById('shopFreeView').style.display = 'none';
+
+            if (tab === 'boxes') {
+                document.getElementById('shopTabBox').classList.add('active');
+                document.getElementById('shopBoxesView').style.display = 'block';
+            } else if (tab === 'titles') {
+                document.getElementById('shopTabTitle').classList.add('active');
+                document.getElementById('shopTitlesView').style.display = 'block';
+            } else if (tab === 'themes') {
+                document.getElementById('shopTabTheme').classList.add('active');
+                document.getElementById('shopThemesView').style.display = 'block';
+            } else {
+                document.getElementById('shopTabFree').classList.add('active');
+                document.getElementById('shopFreeView').style.display = 'block';
+            }
+        }
+
+        function renderShopBoxes() {
+            const container = document.getElementById('shopBoxesView');
+            if (!userData.fragments) userData.fragments = { box500: 0, box1000: 0 };
+
+            const can100 = userData.coins >= 100;
+            const can500 = userData.coins >= 500;
+            const can1000 = userData.coins >= 1000;
+
+            const hasFrag500 = userData.fragments.box500 >= 10;
+            const hasFrag1000 = userData.fragments.box1000 >= 10;
+
+            let html = `
+                <div class="box-card">
+                    <h4><span>📦 일반 행운 상자</span> <span style="color:var(--primary-color);">💰 100 코인</span></h4>
+                    <div class="prob-table">
+                        <div><span>🧩 고급 상자 조각 지급</span><strong style="color:#00ff80;">1개 확정 (100%)</strong></div>
+                        <div><span>🎉 코인 잭팟 (+300 코인)</span><strong style="color:#ffe600;">15.0% 확률</strong></div>
+                        <div><span>👑 네온 칭호 획득</span><strong style="color:#ff0055;">2.0% (최저 확률)</strong></div>
+                    </div>
+                    <div class="box-btn-group">
+                        <button class="buy-btn" ${can100 ? '' : 'disabled'} onclick="openBox(100, false)">상자 열기 (100 코인)</button>
+                    </div>
+                </div>
+
+                <div class="box-card" style="border-color:#ffe600;">
+                    <h4><span>🎁 고급 행운 상자</span> <span style="color:#ffe600;">💰 500 코인</span></h4>
+                    <div style="font-size:11px; margin-bottom:6px; color:#00ff80;">🧩 모은 고급 조각: <strong>${userData.fragments.box500}</strong> / 10</div>
+                    <div class="prob-table">
+                        <div><span>🧩 전설 상자 조각 지급</span><strong style="color:#00ff80;">1개 확정 (100%)</strong></div>
+                        <div><span>🎉 코인 잭팟 (+1,500 코인)</span><strong style="color:#ffe600;">25.0% 확률</strong></div>
+                        <div><span>👑 네온 칭호 획득</span><strong style="color:#ff0055;">5.0% (최저 확률)</strong></div>
+                    </div>
+                    <div class="box-btn-group">
+                        <button class="buy-btn" style="background:#ffe600; color:#000;" ${can500 ? '' : 'disabled'} onclick="openBox(500, false)">500 코인 열기</button>
+                        <button class="frag-btn" ${hasFrag500 ? '' : 'disabled'} onclick="openBox(500, true)">🧩 조각 10개로 열기</button>
+                    </div>
+                </div>
+
+                <div class="box-card" style="border-color:#ff0055;">
+                    <h4><span>👑 전설 미스터리 상자</span> <span style="color:#ff0055;">💰 1000 코인</span></h4>
+                    <div style="font-size:11px; margin-bottom:6px; color:#00ff80;">🧩 모은 전설 조각: <strong>${userData.fragments.box1000}</strong> / 10</div>
+                    <div class="prob-table">
+                        <div><span>🧩 전설 상자 조각 지급</span><strong style="color:#00ff80;">1개 확정 (100%)</strong></div>
+                        <div><span>🎉 코인 잭팟 (+5,000 코인)</span><strong style="color:#ffe600;">40.0% 확률</strong></div>
+                        <div><span>👑 네온 칭호 획득</span><strong style="color:#ff0055;">10.0% (최저 확률)</strong></div>
+                    </div>
+                    <div class="box-btn-group">
+                        <button class="buy-btn" style="background:#ff0055; color:#fff;" ${can1000 ? '' : 'disabled'} onclick="openBox(1000, false)">1000 코인 열기</button>
+                        <button class="frag-btn" ${hasFrag1000 ? '' : 'disabled'} onclick="openBox(1000, true)">🧩 조각 10개로 열기</button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        async function openBox(tier, useFragment) {
+            if (!userData.fragments) userData.fragments = { box500: 0, box1000: 0 };
+
+            if (useFragment) {
+                const fragKey = tier === 500 ? 'box500' : 'box1000';
+                if (userData.fragments[fragKey] < 10) return alert("조각이 부족합니다!");
+                userData.fragments[fragKey] -= 10;
+            } else {
+                if (userData.coins < tier) return alert("코인이 부족합니다!");
+                userData.coins -= tier;
+            }
+
+            const modal = document.getElementById('boxOpenModal');
+            const animBox = document.getElementById('animBox');
+            const lightBurst = document.getElementById('lightBurst');
+            const resultCard = document.getElementById('resultCard');
+            const rewardList = document.getElementById('rewardList');
+            const resultTitle = document.getElementById('resultTitle');
+
+            let glowColor = "#00ffff";
+            let boxFill = "#00ffff";
+            let boxStroke = "#0088ff";
+
+            if (tier === 500) {
+                glowColor = "#ffe600";
+                boxFill = "#ffe600";
+                boxStroke = "#ffaa00";
+            } else if (tier === 1000) {
+                glowColor = "#ff0055";
+                boxFill = "#ff0055";
+                boxStroke = "#aa00ff";
+            }
+
+            document.documentElement.style.setProperty('--box-glow-color', glowColor);
+            document.getElementById('boxPath1').setAttribute('fill', boxFill);
+            document.getElementById('boxPath1').setAttribute('stroke', boxStroke);
+            document.getElementById('boxPath2').setAttribute('stroke', boxStroke);
+            document.getElementById('boxPath3').setAttribute('stroke', boxStroke);
+
+            rewardList.innerHTML = '';
+            resultCard.classList.remove('show');
+            animBox.className = `anim-box shake-${tier}`;
+            lightBurst.className = 'light-burst';
+            modal.classList.add('active');
+
+            let rewardsHTML = '';
+
+            if (tier === 100) {
+                userData.fragments.box500 += 1;
+                rewardsHTML += `<div class="reward-item"><span>🧩 고급 상자 조각</span><strong>+1개 (확정)</strong></div>`;
+            } else {
+                userData.fragments.box1000 += 1;
+                rewardsHTML += `<div class="reward-item"><span>🧩 전설 상자 조각</span><strong>+1개 (확정)</strong></div>`;
+            }
+
+            const jackpotProbs = { 100: 0.15, 500: 0.25, 1000: 0.40 };
+            const jackpotAmounts = { 100: 300, 500: 1500, 1000: 5000 };
+
+            if (Math.random() < jackpotProbs[tier]) {
+                const winCoin = jackpotAmounts[tier];
+                userData.coins += winCoin;
+                rewardsHTML += `<div class="reward-item"><span>💰 코인 잭팟!</span><strong style="color:#ffe600;">+${winCoin.toLocaleString()} 코인</strong></div>`;
+            } else {
+                const smallPayback = Math.floor(tier * (0.1 + Math.random() * 0.2));
+                userData.coins += smallPayback;
+                rewardsHTML += `<div class="reward-item"><span>🪙 소액 코인 환급</span><strong>+${smallPayback} 코인</strong></div>`;
+            }
+
+            const titleProbs = { 100: 0.02, 500: 0.05, 1000: 0.10 };
+            if (Math.random() < titleProbs[tier]) {
+                const gachaTitles = ALL_TITLES.filter(t => !t.isShopBuyable && !userData.titles.includes(t.name));
+                if (gachaTitles.length > 0) {
+                    const drawn = gachaTitles[Math.floor(Math.random() * gachaTitles.length)];
+                    userData.titles.push(drawn.name);
+                    rewardsHTML += `<div class="reward-item rare"><span>👑 희귀 칭호 획득!</span><strong>${renderTitleBadge(drawn.name)}</strong></div>`;
+                } else {
+                    userData.coins += 300;
+                    rewardsHTML += `<div class="reward-item"><span>👑 칭호 중복 보유 보상</span><strong>+300 코인</strong></div>`;
+                }
+            }
+
+            await saveUserData();
+
+            const delayTime = tier === 1000 ? 1500 : (tier === 500 ? 1200 : 900);
+            setTimeout(() => {
+                animBox.className = 'anim-box open-pop';
+                lightBurst.classList.add('active');
+                resultTitle.textContent = `${tier === 1000 ? '👑 전설' : (tier === 500 ? '🎁 고급' : '📦 일반')} 상자 개봉 완료!`;
+                rewardList.innerHTML = rewardsHTML;
+
+                setTimeout(() => {
+                    resultCard.classList.add('show');
+                }, 300);
+            }, delayTime);
+        }
+
+        function closeBoxOpenModal() {
+            document.getElementById('boxOpenModal').classList.remove('active');
+            renderShopBoxes();
+            renderShopTitles();
+        }
+
+        /* 🎯 3열 빙고판 형태로 칭호 목록 렌더링 */
+        function renderShopTitles() {
+            const container = document.getElementById('shopTitlesView');
+            let html = `<p style="color:#aaa; font-size:11px; margin-bottom:10px; text-align:center;">💰 <b>코인 구매 전용 칭호가 최상단에 우선 표시됩니다.</b></p>`;
+
+            const sortedTitles = [...ALL_TITLES].sort((a, b) => {
+                if (a.isShopBuyable && !b.isShopBuyable) return -1;
+                if (!a.isShopBuyable && b.isShopBuyable) return 1;
+                return a.price - b.price;
+            });
+
+            html += `<div class="title-bingo-grid">`;
+
+            sortedTitles.forEach(item => {
+                const isOwned = userData.titles.includes(item.name);
+                const isEquipped = userData.equippedTitle === item.name;
+
+                let actionBtn = "";
+                if (isEquipped) {
+                    actionBtn = `<button class="title-card-btn" style="background:rgba(0,255,255,0.2); color:var(--primary-color);" disabled>장착 중</button>`;
+                } else if (isOwned) {
+                    actionBtn = `<button class="title-card-btn equip-btn" onclick="equipTitle('${item.name}')">장착</button>`;
+                } else if (item.isShopBuyable) {
+                    const canAfford = userData.coins >= item.price;
+                    actionBtn = `<button class="title-card-btn buy-btn" ${canAfford ? '' : 'disabled'} onclick="buyTitle('${item.name}', ${item.price})">💰${item.price.toLocaleString()}</button>`;
+                } else {
+                    actionBtn = `<button class="title-card-btn" style="background:#222; color:#777;" disabled>📦 상자전용</button>`;
+                }
+
+                html += `
+                    <div class="title-card">
+                        <div>${renderTitleBadge(item.name)}</div>
+                        ${actionBtn}
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        async function buyTitle(titleName, price) {
+            if (userData.coins < price) return alert("코인이 부족합니다!");
+            userData.coins -= price;
+            userData.titles.push(titleName);
+            userData.equippedTitle = titleName;
+            await saveUserData();
+            renderShopTitles();
+            alert(`🎉 칭호 '${titleName}'을(를) 구매 및 즉시 장착했습니다!`);
+        }
+
+        function renderShopThemes() {
+            const container = document.getElementById('shopThemesView');
+            let html = "";
+
+            availableThemes.forEach(item => {
+                const isOwned = userData.themes.includes(item.id);
+                const isEquipped = userData.equippedTheme === item.id;
+
+                let actionBtn = "";
+                if (isEquipped) {
+                    actionBtn = `<span style="color:var(--primary-color); font-size:11px; font-weight:bold;">장착 중</span>`;
+                } else if (isOwned) {
+                    actionBtn = `<button class="equip-btn" onclick="equipTheme('${item.id}')">적용하기</button>`;
+                } else {
+                    const canAfford = userData.coins >= item.price;
+                    actionBtn = `<button class="buy-btn" ${canAfford ? '' : 'disabled'} onclick="buyTheme('${item.id}', ${item.price})">구매 (💰${item.price})</button>`;
+                }
+
+                html += `
+                    <div class="shop-item">
+                        <span>${item.name}</span>
+                        ${actionBtn}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function equipTitle(titleName) {
+            userData.equippedTitle = titleName;
+            await saveUserData();
+            renderShopTitles();
+        }
+
+        async function buyTheme(themeId, price) {
+            if (userData.coins < price) return alert("코인이 부족합니다!");
+            userData.coins -= price;
+            userData.themes.push(themeId);
+            userData.equippedTheme = themeId;
+            await saveUserData();
+            renderShopThemes();
+            alert(`🎨 테마가 변경 및 적용되었습니다!`);
+        }
+
+        async function equipTheme(themeId) {
+            userData.equippedTheme = themeId;
+            await saveUserData();
+            renderShopThemes();
+        }
+
+        async function claimFreeReward() {
+            const today = new Date().toISOString().split('T')[0];
+            if (userData.lastFreeDate === today) {
+                return alert("오늘 이미 출석 보상을 받으셨습니다! 내일 다시 오세요.");
+            }
+
+            userData.lastFreeDate = today;
+            const rand = Math.random() * 100;
+
+            if (rand < 5) {
+                const rareTitle = "🎲 [확률의 신]";
+                if (!userData.titles.includes(rareTitle)) {
+                    userData.titles.push(rareTitle);
+                    userData.equippedTitle = rareTitle;
+                    alert("🎉 [5% 대박 당첨!] 출석 보상으로 희귀 칭호 '🎲 [확률의 신]'을 획득하고 장착했습니다!");
+                } else {
+                    userData.coins += 100;
+                    alert("🎉 칭호 중복 보유로 100 코인이 보급되었습니다!");
+                }
+            } else {
+                const giveCoins = Math.floor(Math.random() * 51) + 30;
+                userData.coins += giveCoins;
+                alert(`🎁 출석 체크! 무료 코인 ${giveCoins}개를 획득했습니다!`);
+            }
+
+            await saveUserData();
+            renderShopTitles();
+            renderShopThemes();
+            renderShopBoxes();
+        }
+
+        async function devAdjustCoins() {
+            if (!isAdmin) return;
+            const input = prompt("설정할 코인 금액을 입력하세요:", userData.coins);
+            if (input !== null && !isNaN(input)) {
+                userData.coins = parseInt(input);
+                await saveUserData();
+                renderShopTitles();
+                renderShopThemes();
+                renderShopBoxes();
+                alert(`개발자 권한: 코인이 ${userData.coins}개로 조정되었습니다.`);
+            }
+        }
+
+        /* 🏆 랭킹판 조회 및 닉네임 [칭호] 파싱 버그 수정 완료 */
+        async function fetchRankings() {
+            const modeNames = { speed: '⚡ 스피드 러시', survive: '🛡️ 서바이벌', sentence: '📜 딥 센텐스', boss: '🐉 보스 레이드' };
+            if (!supabaseClient) return;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('rankings')
+                    .select('id, nickname, score')
+                    .eq('mode', selectedMode)
+                    .order('score', { ascending: false })
+                    .limit(100);
+
+                if (error) throw error;
+
+                const uniqueRankings = [];
+                const seenUsernames = new Set();
+
+                if (data && data.length > 0) {
+                    for (const row of data) {
+                        // 💡 마지막 닫는 대괄호 ] 기준 정규표현식으로 버그 완벽 수정
+                        let cleanName = row.nickname;
+                        const match = row.nickname.match(/^\[(.*)\]\s*(.*)$/);
+                        if (match) cleanName = match[2];
+
+                        if (!seenUsernames.has(cleanName)) {
+                            seenUsernames.add(cleanName);
+                            uniqueRankings.push(row);
+                        }
+
+                        if (uniqueRankings.length === 3) break;
+                    }
+                }
+
+                let html = `<div class="ranking-title">🏆 [${modeNames[selectedMode]}] 명예의 전당 TOP 3</div>`;
+                const medals = ['🥇', '🥈', '🥉'];
+
+                if (uniqueRankings.length > 0) {
+                    uniqueRankings.forEach((row, index) => {
+                        let adminControls = "";
+                        if (isAdmin) {
+                            adminControls = `
+                                <span>
+                                    <button class="admin-action-btn" style="background:none; border:none; cursor:pointer;" onclick="editRank(${row.id}, '${row.nickname}', ${row.score})">✏️</button>
+                                    <button class="admin-action-btn" style="background:none; border:none; cursor:pointer;" onclick="deleteRank(${row.id}, '${row.nickname}')">🗑️</button>
+                                </span>
+                            `;
+                        }
+                        
+                        let formattedName = row.nickname;
+                        // 💡 대괄호가 칭호명에 포함되어 있어도 정확히 분리하는 정규식 적용
+                        const match = row.nickname.match(/^\[(.*)\]\s*(.*)$/);
+                        if (match) {
+                            const titleStr = match[1];
+                            const nameStr = match[2];
+                            formattedName = `${renderTitleBadge(titleStr)} ${nameStr}`;
+                        }
+
+                        html += `
+                            <div class="rank-item">
+                                <span>${medals[index] || '•'} ${formattedName}</span> 
+                                <span><strong>${row.score}점</strong> ${adminControls}</span>
+                            </div>`;
+                    });
+                } else {
+                    html += `<div style="text-align:center; padding:5px; color:#aaa;">등록된 기록이 없습니다. 첫 번째 주인공이 되어보세요!</div>`;
+                }
+
+                rankingView.innerHTML = html;
+            } catch (e) {
+                rankingView.innerHTML = `<div class="ranking-title">🏆 [${modeNames[selectedMode]}] 기록을 불러오지 못했습니다.</div>`;
+            }
+        }
+
+        async function deleteRank(id, targetName) {
+            if (!isAdmin) return;
+            if (confirm(`개발자 권한: '${targetName}' 님의 기록을 삭제하시겠습니까?`)) {
+                const { error } = await supabaseClient.from('rankings').delete().eq('id', id);
+                if (!error) { fetchRankings(); alert("삭제되었습니다."); }
+            }
+        }
+
+        async function editRank(id, oldName, oldScore) {
+            if (!isAdmin) return;
+            const newScore = prompt(`'${oldName}' 님의 점수 수정:`, oldScore);
+            if (newScore !== null && !isNaN(newScore)) {
+                const { error } = await supabaseClient.from('rankings').update({ score: parseInt(newScore) }).eq('id', id);
+                if (!error) { fetchRankings(); alert("수정되었습니다."); }
+            }
+        }
+
+        function setMode(mode) {
+            selectedMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`mode-${mode}`).classList.add('active');
+            fetchRankings();
+        }
+
+        function goToGame() {
+            if (!currentUser) return alert("로그인이 필요합니다.");
+
+            const modeNames = { speed: '스피드 러시', survive: '서바이벌 모드', sentence: '딥 센텐스', boss: '보스 레이드' };
+            welcomePlayer.innerHTML = `${renderTitleBadge(userData.equippedTitle)} ${username} | ${modeNames[selectedMode]}`;
+            
+            if (selectedMode === 'survive') {
+                statLabel.textContent = "단어 제한 시간";
+                statValue = 4; 
+            } else if (selectedMode === 'boss') {
+                statLabel.textContent = "남은 시간";
+                statValue = 45; 
+            } else {
+                statLabel.textContent = "남은 시간";
+                statValue = 30;
+            }
+
+            homeScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+
+            initRound();
+        }
+
+        function goToHome() {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            isStarted = false;
+            gameScreen.classList.remove('active');
+            homeScreen.classList.add('active');
+            fetchRankings();
+            checkBuffState();
+        }
+
+        function initRound() {
+            score = 0;
+            combo = 0;
+            isPlaying = true;
+            isStarted = false;
+            scoreEl.textContent = score;
+            comboEl.textContent = combo;
+            statValueEl.textContent = statValue;
+            
+            inputBox.value = "";
+            inputBox.focus();
+            nextWord();
+        }
+
+        function startTimerIfNeeded() {
+            if (!isStarted) {
+                isStarted = true;
+                clearInterval(gameInterval);
+                gameInterval = setInterval(() => {
+                    statValue--;
+                    statValueEl.textContent = statValue;
+                    if (statValue <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            }
+        }
+
+        function nextWord() {
+            let pool = selectedMode === 'sentence' ? sentencePool : (selectedMode === 'boss' ? bossPool : wordPool);
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            currentWord = pool[randomIndex];
+            wordDisplay.textContent = currentWord;
+
+            if (selectedMode === 'survive' && isStarted) {
+                statValue = 4; 
+                statValueEl.textContent = statValue;
+            }
+        }
+
+        let isComposing = false;
+        inputBox.addEventListener('compositionstart', () => { isComposing = true; });
+        inputBox.addEventListener('compositionend', () => { 
+            isComposing = false; 
+            if (inputBox.value.length > 0) startTimerIfNeeded();
+            checkInput(); 
+        });
+        inputBox.addEventListener('input', () => {
+            if (!isPlaying) return;
+            if (inputBox.value.length > 0) startTimerIfNeeded();
+            if (!isComposing) checkInput();
+        });
+
+        function checkInput() {
+            const typedValue = inputBox.value.trim();
+            if (typedValue === currentWord) {
+                combo++;
+                let addScore = selectedMode === 'sentence' ? 30 : (selectedMode === 'boss' ? 50 : 10);
+                score += addScore + (combo >= 5 ? 10 : 0);
+                
+                scoreEl.textContent = score;
+                comboEl.textContent = combo;
+                
+                inputBox.value = "";
+                nextWord();
+            }
+        }
+
+        async function endGame() {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            inputBox.value = "";
+            wordDisplay.textContent = "GAME OVER 🛑";
+
+            let earnedCoins = Math.floor(score / 12) + Math.floor(combo / 2);
+            if (earnedCoins < 5 && score > 0) earnedCoins = 5;
+
+            const isBuffActive = userData.coinBuffUntil && userData.coinBuffUntil > Date.now();
+            if (isBuffActive) {
+                earnedCoins = Math.floor(earnedCoins * 1.5);
+            }
+
+            userData.coins += earnedCoins;
+            await saveUserData();
+
+            if (supabaseClient) {
+                try {
+                    const fullPlayerName = `[${userData.equippedTitle}] ${username}`;
+                    await supabaseClient
+                        .from('rankings')
+                        .insert([{ nickname: fullPlayerName, score: score, mode: selectedMode }]);
+
+                    alert(`게임 종료!\n최종 점수: ${score}점\n💰 ${earnedCoins} 코인을 획득했습니다! ${isBuffActive ? '(⚡ 1.5배 부스트 적용)' : ''}`);
+                } catch (e) {
+                    alert(`게임 종료! 점수: ${score}점 | 💰 +${earnedCoins} 코인`);
+                }
+            }
+
+            setTimeout(goToHome, 1500);
+        }
+
+
+        /* ==================== 1:1 PvP 모드 ==================== */
+        const PVP_TIME=20;
+        const pvpScreen=document.getElementById('pvpScreen'),pvpStatusBox=document.getElementById('pvpStatusBox'),pvpBattleBox=document.getElementById('pvpBattleBox'),pvpResultBox=document.getElementById('pvpResultBox');
+const pvpStatusText=document.getElementById('pvpStatusText'),pvpWordDisplay=document.getElementById('pvpWordDisplay'),pvpInputBox=document.getElementById('pvpInputBox'),pvpTimerEl=document.getElementById('pvpTimerEl'),pvpMyWordsEl=document.getElementById('pvpMyWordsEl'),pvpOppWordsEl=document.getElementById('pvpOppWordsEl'),pvpMyNameEl=document.getElementById('pvpMyNameEl'),pvpOppNameEl=document.getElementById('pvpOppNameEl');
+let pvpState='idle',pvpId=null,lobbyChannel=null,roomChannel=null,pvpOppId=null,pvpOppName='',pvpMyWords=0,pvpOppWords=0,pvpOppFinal=null,pvpSeq=[],pvpIdx=0,pvpTimeLeft=PVP_TIME,pvpGameIv=null,pvpCountIv=null,pvpFinishTimeout=null,pvpRoomGuard=null;
+const pvpHash=function(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),3432918353);return h>>>0};
+function pvpRand(seed){return function(){seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}};
+function setPvpView(v){pvpStatusBox.style.display=v==='status'?'block':'none';pvpBattleBox.style.display=v==='battle'?'block':'none';pvpResultBox.style.display=v==='result'?'block':'none'}
+function startMatchmaking(){if(!currentUser)return alert('로그인이 필요합니다.');if(!supabaseClient)return alert('서버에 연결할 수 없습니다.');if(pvpState!=='idle')return;pvpState='searching';pvpId=Date.now().toString(36)+Math.random().toString(36).slice(2,10);homeScreen.classList.remove('active');gameScreen.classList.remove('active');pvpScreen.classList.add('active');setPvpView('status');pvpStatusText.textContent='⏳ 상대를 찾는 중...';lobbyChannel=supabaseClient.channel('pvp-lobby',{config:{presence:{key:pvpId}}});lobbyChannel.on('presence',{event:'sync'},checkLobbyForMatch).on('presence',{event:'join'},checkLobbyForMatch);lobbyChannel.subscribe(async function(status){if(status==='SUBSCRIBED'){try{await lobbyChannel.track({name:username,t:Date.now()})}catch(e){}setTimeout(checkLobbyForMatch,300)}})}
+function checkLobbyForMatch(){if(pvpState!=='searching'||!lobbyChannel)return;const st=lobbyChannel.presenceState(),ids=Object.keys(st).sort(),i=ids.indexOf(pvpId);if(ids.length<2||i<0)return;const opp=ids[i%2===0?i+1:i-1];if(opp){const meta=st[opp]&&st[opp][0]||{};enterPvpRoom(opp,meta.name||'상대')}}
+async function enterPvpRoom(oppId,oppName){if(pvpState!=='searching')return;pvpState='matched';pvpOppId=oppId;pvpOppName=oppName;if(lobbyChannel){try{supabaseClient.removeChannel(lobbyChannel)}catch(e){}lobbyChannel=null}const roomId=[pvpId,oppId].sort().join('_'),r=pvpRand(pvpHash(roomId));pvpSeq=Array.from({length:400},()=>wordPool[Math.floor(r()*wordPool.length)]);roomChannel=supabaseClient.channel('pvp-room-'+roomId,{config:{presence:{key:pvpId},broadcast:{self:false}}});roomChannel.on('broadcast',{event:'score'},m=>{const p=m.payload;if(p&&p.id!==pvpId){pvpOppWords=p.words;updatePvpBoard()}}).on('broadcast',{event:'final'},m=>{const p=m.payload;if(p&&p.id!==pvpId){pvpOppFinal=p.words;pvpOppWords=p.words;tryShowPvpResult()}}).on('presence',{event:'sync'},()=>{if(Object.keys(roomChannel.presenceState()).length>=2)startPvpCountdown()});roomChannel.subscribe(async s=>{if(s==='SUBSCRIBED')try{await roomChannel.track({name:username})}catch(e){}});pvpRoomGuard=setTimeout(()=>{if(pvpState==='matched'){cleanupPvpChannels();pvpState='idle';startMatchmaking()}},12000)}
+function updatePvpBoard(){pvpMyWordsEl.textContent=pvpMyWords;pvpOppWordsEl.textContent=pvpOppWords}
+function startPvpCountdown(){if(pvpState!=='matched')return;pvpState='countdown';clearTimeout(pvpRoomGuard);pvpMyWords=pvpOppWords=0;pvpIdx=0;pvpOppFinal=null;pvpTimeLeft=PVP_TIME;pvpMyNameEl.textContent=username+' (나)';pvpOppNameEl.textContent=pvpOppName;updatePvpBoard();pvpTimerEl.textContent=PVP_TIME;setPvpView('battle');let c=3;pvpWordDisplay.textContent=c;pvpCountIv=setInterval(()=>{c--;if(c>0)pvpWordDisplay.textContent=c;else{clearInterval(pvpCountIv);beginPvpPlay()}},1000)}
+function beginPvpPlay(){if(pvpState!=='countdown')return;pvpState='playing';pvpInputBox.disabled=false;pvpInputBox.value='';pvpInputBox.focus();pvpWordDisplay.textContent=pvpSeq[pvpIdx];pvpGameIv=setInterval(()=>{pvpTimeLeft--;pvpTimerEl.textContent=pvpTimeLeft;if(pvpTimeLeft<=0)finishMyPvpSide()},1000)}
+pvpInputBox.addEventListener('input',function(){if(pvpState==='playing'&&pvpInputBox.value.trim()===pvpSeq[pvpIdx]){pvpMyWords++;pvpIdx++;pvpInputBox.value='';pvpWordDisplay.textContent=pvpSeq[pvpIdx];updatePvpBoard();if(roomChannel)roomChannel.send({type:'broadcast',event:'score',payload:{id:pvpId,words:pvpMyWords}})}});
+function finishMyPvpSide(){if(pvpState!=='playing')return;pvpState='finished';clearInterval(pvpGameIv);pvpInputBox.disabled=true;if(roomChannel)roomChannel.send({type:'broadcast',event:'final',payload:{id:pvpId,words:pvpMyWords}});pvpFinishTimeout=setTimeout(()=>{if(pvpState==='finished'){pvpOppFinal=pvpOppWords;tryShowPvpResult()}},4000);tryShowPvpResult()}
+async function tryShowPvpResult(){if(pvpState!=='finished'||pvpOppFinal===null)return;pvpState='result';clearTimeout(pvpFinishTimeout);const my=pvpMyWords,op=pvpOppFinal,reward=my>op?30:my<op?10:15;const t=document.getElementById('pvpResultTitle');t.textContent=my>op?'🏆 승리!':my<op?'💀 패배...':'🤝 무승부';t.className='pvp-result-title '+(my>op?'pvp-win':my<op?'pvp-lose':'pvp-draw');document.getElementById('pvpResultDesc').innerHTML='나 <b>'+my+'단어</b> vs <b>'+op+'단어</b> '+pvpOppName+'<br>💰 보상: +'+reward+' 코인';setPvpView('result');if(currentUser){userData.coins+=reward;try{await saveUserData()}catch(e){}}cleanupPvpChannels()}
+function cleanupPvpChannels(){if(lobbyChannel){try{supabaseClient.removeChannel(lobbyChannel)}catch(e){}lobbyChannel=null}if(roomChannel){try{supabaseClient.removeChannel(roomChannel)}catch(e){}roomChannel=null}}
+function resetPvp(){clearInterval(pvpGameIv);clearInterval(pvpCountIv);clearTimeout(pvpFinishTimeout);clearTimeout(pvpRoomGuard);cleanupPvpChannels();pvpState='idle';pvpInputBox.value='';pvpInputBox.disabled=true;setPvpView('status')}
+function pvpRematch(){resetPvp();startMatchmaking()}function exitPvp(){resetPvp();pvpScreen.classList.remove('active');homeScreen.classList.add('active');fetchRankings();checkBuffState()}window.addEventListener('beforeunload',cleanupPvpChannels);
+
+        fetchRankings();
+        checkAuthState();
+    </script>
+</body>
+</html>
