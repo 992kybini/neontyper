@@ -348,9 +348,6 @@
             color: #000;
         }
         
-        /* -------------------------------------------------------------
-           🎯 칭호 빙고판 형태 (3열 그리드) 스타일
-        ------------------------------------------------------------- */
         .title-bingo-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -578,9 +575,6 @@
         }
         .reward-item.rare { border-left-color: #ff0055; background: rgba(255, 0, 85, 0.15); }
 
-        /* -------------------------------------------------------------
-           ✨ 칭호 스타일
-        ------------------------------------------------------------- */
         .title-badge {
             display: inline-block;
             font-weight: 900;
@@ -629,8 +623,6 @@
         .title-wealth-lord { background: linear-gradient(135deg, #ff0055, #ffe600); color: #fff; text-shadow: 0 0 3px #000; box-shadow: 0 0 15px #ff0055; }
         .title-galaxy-apex { background: linear-gradient(90deg, #aa00ff, #0088ff, #00ffff); color: #fff; box-shadow: 0 0 15px #aa00ff; }
         .title-all-watcher { background: #ffffff; color: #000; box-shadow: 0 0 20px #ffffff, 0 0 10px #00ffff; border: 1px solid #000; animation: pulseGlow 0.8s infinite alternate; }
-
-        /* 신규 뽑기 전용 칭호 스타일 */
         .title-time-ruler { background: linear-gradient(135deg, #00ffff, #aa00ff); color: #fff; box-shadow: 0 0 15px #aa00ff; }
         .title-golden-lord { background: linear-gradient(90deg, #ffe600, #ff8800); color: #000; box-shadow: 0 0 15px #ffe600; }
         .title-speed-myth { background: linear-gradient(45deg, #00ff80, #ffe600); color: #000; box-shadow: 0 0 12px #00ff80; }
@@ -837,11 +829,9 @@
             supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
-        /* 💡 100개 단어 대거 추가된 wordPool (총 120개) */
         const wordPool = [
             "사과", "바나나", "포도", "딸기", "수박", "참외", "복숭아", "자두", "감귤", "토마토", 
             "하늘", "바다", "구름", "별빛", "달빛", "태양", "산맥", "강물", "나무", "꽃잎",
-            // 추가된 100단어
             "호랑이", "사자", "기린", "코끼리", "돌고래", "펭귄", "독수리", "올빼미", "다람쥐", "고양이",
             "강아지", "여우", "늑대", "북극곰", "표범", "판다", "캥거루", "은하수", "유성우", "사막",
             "오아시스", "빙하", "폭포", "노을", "새벽", "바람", "천둥", "번개", "무지개", "단풍",
@@ -857,9 +847,7 @@
         const sentencePool = ["인생은 속도가 아니라 방향이다.", "고통이 없으면 얻는 것도 없다.", "오늘 할 수 있는 일을 내일로 미루지 마라.", "자신을 믿어라. 길은 반드시 열린다."];
         const bossPool = ["하이퍼리얼리즘인공지능시스템", "사이버네틱스시퀀셜알고리즘", "일렉트로닉스볼텍스프로토콜", "디지털트랜스포메이션엔지니어"];
 
-        /* 칭호 데이터 (뽑기 전용 칭호 대거 추가) */
         const ALL_TITLES = [
-            // 💰 코인으로 구매 가능한 상점 전용 칭호
             { name: "⚡ [시공의 개척자]", rarity: "상점전용", class: "title-pioneer", isShopBuyable: true, price: 400 },
             { name: "🏃 [기적의 체이서]", rarity: "상점전용", class: "title-chaser", isShopBuyable: true, price: 800 },
             { name: "🔥 [운명을 비웃는 자]", rarity: "상점전용", class: "title-fate", isShopBuyable: true, price: 1500 },
@@ -869,7 +857,6 @@
             { name: "🌌 [은하의 정점]", rarity: "상점전용", class: "title-galaxy-apex", isShopBuyable: true, price: 12000 },
             { name: "👁️ [만물의 관찰자]", rarity: "상점전용", class: "title-all-watcher", isShopBuyable: true, price: 20000 },
 
-            // 📦 상자/출석 전용 뽑기 칭호 (신규 칭호 대거 추가)
             { name: "✨ [신의 한수]", rarity: "전설", class: "title-god", isShopBuyable: false, price: 0 },
             { name: "🌌 [시공의 지배자]", rarity: "전설", class: "title-time-ruler", isShopBuyable: false, price: 0 },
             { name: "👑 [황금빛 군주]", rarity: "전설", class: "title-golden-lord", isShopBuyable: false, price: 0 },
@@ -1252,7 +1239,6 @@
             renderShopTitles();
         }
 
-        /* 🎯 3열 빙고판 형태로 칭호 목록 렌더링 */
         function renderShopTitles() {
             const container = document.getElementById('shopTitlesView');
             let html = `<p style="color:#aaa; font-size:11px; margin-bottom:10px; text-align:center;">💰 <b>코인 구매 전용 칭호가 최상단에 우선 표시됩니다.</b></p>`;
@@ -1398,7 +1384,6 @@
             }
         }
 
-        /* 🏆 랭킹판 조회 및 닉네임 [칭호] 파싱 버그 수정 완료 */
         async function fetchRankings() {
             const modeNames = { speed: '⚡ 스피드 러시', survive: '🛡️ 서바이벌', sentence: '📜 딥 센텐스', boss: '🐉 보스 레이드' };
             if (!supabaseClient) return;
@@ -1418,7 +1403,6 @@
 
                 if (data && data.length > 0) {
                     for (const row of data) {
-                        // 💡 마지막 닫는 대괄호 ] 기준 정규표현식으로 버그 완벽 수정
                         let cleanName = row.nickname;
                         const match = row.nickname.match(/^\[(.*)\]\s*(.*)$/);
                         if (match) cleanName = match[2];
@@ -1448,7 +1432,6 @@
                         }
                         
                         let formattedName = row.nickname;
-                        // 💡 대괄호가 칭호명에 포함되어 있어도 정확히 분리하는 정규식 적용
                         const match = row.nickname.match(/^\[(.*)\]\s*(.*)$/);
                         if (match) {
                             const titleStr = match[1];
@@ -1630,27 +1613,246 @@
             setTimeout(goToHome, 1500);
         }
 
+        /* ==================== 1:1 PvP 모드 (즉시 매칭 최적화) ==================== */
+        const PVP_TIME = 20;
+        const pvpScreen = document.getElementById('pvpScreen'), pvpStatusBox = document.getElementById('pvpStatusBox'), pvpBattleBox = document.getElementById('pvpBattleBox'), pvpResultBox = document.getElementById('pvpResultBox');
+        const pvpStatusText = document.getElementById('pvpStatusText'), pvpWordDisplay = document.getElementById('pvpWordDisplay'), pvpInputBox = document.getElementById('pvpInputBox'), pvpTimerEl = document.getElementById('pvpTimerEl'), pvpMyWordsEl = document.getElementById('pvpMyWordsEl'), pvpOppWordsEl = document.getElementById('pvpOppWordsEl'), pvpMyNameEl = document.getElementById('pvpMyNameEl'), pvpOppNameEl = document.getElementById('pvpOppNameEl');
+        
+        let pvpState = 'idle', pvpId = null, lobbyChannel = null, roomChannel = null, pvpOppId = null, pvpOppName = '', pvpMyWords = 0, pvpOppWords = 0, pvpOppFinal = null, pvpSeq = [], pvpIdx = 0, pvpTimeLeft = PVP_TIME, pvpGameIv = null, pvpCountIv = null, pvpFinishTimeout = null, pvpRoomGuard = null;
+        
+        const pvpHash = function(s) { let h=1779033703^s.length; for(let i=0; i<s.length; i++) h = Math.imul(h^s.charCodeAt(i),3432918353); return h>>>0 };
+        const pvpRand = function(seed) { return function() { seed = (seed+0x6D2B79F5)|0; let t = Math.imul(seed^(seed>>>15),1|seed); t = (t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296 } };
+        
+        function setPvpView(v) { 
+            pvpStatusBox.style.display = (v === 'status' ? 'block' : 'none'); 
+            pvpBattleBox.style.display = (v === 'battle' ? 'block' : 'none'); 
+            pvpResultBox.style.display = (v === 'result' ? 'block' : 'none'); 
+        }
 
-        /* ==================== 1:1 PvP 모드 ==================== */
-        const PVP_TIME=20;
-        const pvpScreen=document.getElementById('pvpScreen'),pvpStatusBox=document.getElementById('pvpStatusBox'),pvpBattleBox=document.getElementById('pvpBattleBox'),pvpResultBox=document.getElementById('pvpResultBox');
-const pvpStatusText=document.getElementById('pvpStatusText'),pvpWordDisplay=document.getElementById('pvpWordDisplay'),pvpInputBox=document.getElementById('pvpInputBox'),pvpTimerEl=document.getElementById('pvpTimerEl'),pvpMyWordsEl=document.getElementById('pvpMyWordsEl'),pvpOppWordsEl=document.getElementById('pvpOppWordsEl'),pvpMyNameEl=document.getElementById('pvpMyNameEl'),pvpOppNameEl=document.getElementById('pvpOppNameEl');
-let pvpState='idle',pvpId=null,lobbyChannel=null,roomChannel=null,pvpOppId=null,pvpOppName='',pvpMyWords=0,pvpOppWords=0,pvpOppFinal=null,pvpSeq=[],pvpIdx=0,pvpTimeLeft=PVP_TIME,pvpGameIv=null,pvpCountIv=null,pvpFinishTimeout=null,pvpRoomGuard=null;
-const pvpHash=function(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),3432918353);return h>>>0};
-function pvpRand(seed){return function(){seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}};
-function setPvpView(v){pvpStatusBox.style.display=v==='status'?'block':'none';pvpBattleBox.style.display=v==='battle'?'block':'none';pvpResultBox.style.display=v==='result'?'block':'none'}
-function startMatchmaking(){if(!currentUser)return alert('로그인이 필요합니다.');if(!supabaseClient)return alert('서버에 연결할 수 없습니다.');if(pvpState!=='idle')return;pvpState='searching';pvpId=Date.now().toString(36)+Math.random().toString(36).slice(2,10);homeScreen.classList.remove('active');gameScreen.classList.remove('active');pvpScreen.classList.add('active');setPvpView('status');pvpStatusText.textContent='⏳ 상대를 찾는 중...';lobbyChannel=supabaseClient.channel('pvp-lobby',{config:{presence:{key:pvpId}}});lobbyChannel.on('presence',{event:'sync'},checkLobbyForMatch).on('presence',{event:'join'},checkLobbyForMatch);lobbyChannel.subscribe(async function(status){if(status==='SUBSCRIBED'){try{await lobbyChannel.track({name:username,t:Date.now()})}catch(e){}setTimeout(checkLobbyForMatch,300)}})}
-function checkLobbyForMatch(){if(pvpState!=='searching'||!lobbyChannel)return;const st=lobbyChannel.presenceState(),ids=Object.keys(st).sort(),i=ids.indexOf(pvpId);if(ids.length<2||i<0)return;const opp=ids[i%2===0?i+1:i-1];if(opp){const meta=st[opp]&&st[opp][0]||{};enterPvpRoom(opp,meta.name||'상대')}}
-async function enterPvpRoom(oppId,oppName){if(pvpState!=='searching')return;pvpState='matched';pvpOppId=oppId;pvpOppName=oppName;if(lobbyChannel){try{supabaseClient.removeChannel(lobbyChannel)}catch(e){}lobbyChannel=null}const roomId=[pvpId,oppId].sort().join('_'),r=pvpRand(pvpHash(roomId));pvpSeq=Array.from({length:400},()=>wordPool[Math.floor(r()*wordPool.length)]);roomChannel=supabaseClient.channel('pvp-room-'+roomId,{config:{presence:{key:pvpId},broadcast:{self:false}}});roomChannel.on('broadcast',{event:'score'},m=>{const p=m.payload;if(p&&p.id!==pvpId){pvpOppWords=p.words;updatePvpBoard()}}).on('broadcast',{event:'final'},m=>{const p=m.payload;if(p&&p.id!==pvpId){pvpOppFinal=p.words;pvpOppWords=p.words;tryShowPvpResult()}}).on('presence',{event:'sync'},()=>{if(Object.keys(roomChannel.presenceState()).length>=2)startPvpCountdown()});roomChannel.subscribe(async s=>{if(s==='SUBSCRIBED')try{await roomChannel.track({name:username})}catch(e){}});pvpRoomGuard=setTimeout(()=>{if(pvpState==='matched'){cleanupPvpChannels();pvpState='idle';startMatchmaking()}},12000)}
-function updatePvpBoard(){pvpMyWordsEl.textContent=pvpMyWords;pvpOppWordsEl.textContent=pvpOppWords}
-function startPvpCountdown(){if(pvpState!=='matched')return;pvpState='countdown';clearTimeout(pvpRoomGuard);pvpMyWords=pvpOppWords=0;pvpIdx=0;pvpOppFinal=null;pvpTimeLeft=PVP_TIME;pvpMyNameEl.textContent=username+' (나)';pvpOppNameEl.textContent=pvpOppName;updatePvpBoard();pvpTimerEl.textContent=PVP_TIME;setPvpView('battle');let c=3;pvpWordDisplay.textContent=c;pvpCountIv=setInterval(()=>{c--;if(c>0)pvpWordDisplay.textContent=c;else{clearInterval(pvpCountIv);beginPvpPlay()}},1000)}
-function beginPvpPlay(){if(pvpState!=='countdown')return;pvpState='playing';pvpInputBox.disabled=false;pvpInputBox.value='';pvpInputBox.focus();pvpWordDisplay.textContent=pvpSeq[pvpIdx];pvpGameIv=setInterval(()=>{pvpTimeLeft--;pvpTimerEl.textContent=pvpTimeLeft;if(pvpTimeLeft<=0)finishMyPvpSide()},1000)}
-pvpInputBox.addEventListener('input',function(){if(pvpState==='playing'&&pvpInputBox.value.trim()===pvpSeq[pvpIdx]){pvpMyWords++;pvpIdx++;pvpInputBox.value='';pvpWordDisplay.textContent=pvpSeq[pvpIdx];updatePvpBoard();if(roomChannel)roomChannel.send({type:'broadcast',event:'score',payload:{id:pvpId,words:pvpMyWords}})}});
-function finishMyPvpSide(){if(pvpState!=='playing')return;pvpState='finished';clearInterval(pvpGameIv);pvpInputBox.disabled=true;if(roomChannel)roomChannel.send({type:'broadcast',event:'final',payload:{id:pvpId,words:pvpMyWords}});pvpFinishTimeout=setTimeout(()=>{if(pvpState==='finished'){pvpOppFinal=pvpOppWords;tryShowPvpResult()}},4000);tryShowPvpResult()}
-async function tryShowPvpResult(){if(pvpState!=='finished'||pvpOppFinal===null)return;pvpState='result';clearTimeout(pvpFinishTimeout);const my=pvpMyWords,op=pvpOppFinal,reward=my>op?30:my<op?10:15;const t=document.getElementById('pvpResultTitle');t.textContent=my>op?'🏆 승리!':my<op?'💀 패배...':'🤝 무승부';t.className='pvp-result-title '+(my>op?'pvp-win':my<op?'pvp-lose':'pvp-draw');document.getElementById('pvpResultDesc').innerHTML='나 <b>'+my+'단어</b> vs <b>'+op+'단어</b> '+pvpOppName+'<br>💰 보상: +'+reward+' 코인';setPvpView('result');if(currentUser){userData.coins+=reward;try{await saveUserData()}catch(e){}}cleanupPvpChannels()}
-function cleanupPvpChannels(){if(lobbyChannel){try{supabaseClient.removeChannel(lobbyChannel)}catch(e){}lobbyChannel=null}if(roomChannel){try{supabaseClient.removeChannel(roomChannel)}catch(e){}roomChannel=null}}
-function resetPvp(){clearInterval(pvpGameIv);clearInterval(pvpCountIv);clearTimeout(pvpFinishTimeout);clearTimeout(pvpRoomGuard);cleanupPvpChannels();pvpState='idle';pvpInputBox.value='';pvpInputBox.disabled=true;setPvpView('status')}
-function pvpRematch(){resetPvp();startMatchmaking()}function exitPvp(){resetPvp();pvpScreen.classList.remove('active');homeScreen.classList.add('active');fetchRankings();checkBuffState()}window.addEventListener('beforeunload',cleanupPvpChannels);
+        function startMatchmaking() {
+            if (!currentUser) return alert('로그인이 필요합니다.');
+            if (!supabaseClient) return alert('서버에 연결할 수 없습니다.');
+            if (pvpState !== 'idle') return;
+            
+            pvpState = 'searching';
+            pvpId = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+            homeScreen.classList.remove('active');
+            gameScreen.classList.remove('active');
+            pvpScreen.classList.add('active');
+            setPvpView('status');
+            pvpStatusText.textContent = '⏳ 상대를 찾는 중...';
+            
+            lobbyChannel = supabaseClient.channel('pvp-lobby', { config: { presence: { key: pvpId } } });
+            
+            // 💡 딜레이 제거: sync 및 join 이벤트 감지 시 즉시 매칭 검사 실행
+            lobbyChannel
+                .on('presence', { event: 'sync' }, checkLobbyForMatch)
+                .on('presence', { event: 'join' }, checkLobbyForMatch);
+
+            lobbyChannel.subscribe(async function(status) {
+                if (status === 'SUBSCRIBED') {
+                    try { 
+                        await lobbyChannel.track({ name: username, t: Date.now() }); 
+                        // 접속 완료 직후 곧바로 검사하여 지연 시간 최소화
+                        checkLobbyForMatch();
+                    } catch(e) {}
+                }
+            });
+        }
+
+        function checkLobbyForMatch() {
+            if (pvpState !== 'searching' || !lobbyChannel) return;
+            const st = lobbyChannel.presenceState();
+            const ids = Object.keys(st).sort();
+            const i = ids.indexOf(pvpId);
+            
+            if (ids.length < 2 || i < 0) return;
+            
+            let opp = ids[i % 2 === 0 ? i + 1 : i - 1];
+            if (!opp) opp = ids.find(id => id !== pvpId); 
+
+            if (opp) {
+                const meta = st[opp] && st[opp][0] || {};
+                enterPvpRoom(opp, meta.name || '상대');
+            }
+        }
+
+        async function enterPvpRoom(oppId, oppName) {
+            if (pvpState !== 'searching') return;
+            pvpState = 'matched';
+            pvpOppId = oppId;
+            pvpOppName = oppName;
+            
+            const roomId = [pvpId, oppId].sort().join('_');
+            const r = pvpRand(pvpHash(roomId));
+            pvpSeq = Array.from({ length: 400 }, () => wordPool[Math.floor(r() * wordPool.length)]);
+            
+            roomChannel = supabaseClient.channel('pvp-room-' + roomId, { config: { presence: { key: pvpId }, broadcast: { self: false } } });
+            
+            roomChannel.on('broadcast', { event: 'score' }, m => {
+                const p = m.payload;
+                if (p && p.id !== pvpId) { pvpOppWords = p.words; updatePvpBoard(); }
+            }).on('broadcast', { event: 'final' }, m => {
+                const p = m.payload;
+                if (p && p.id !== pvpId) { pvpOppFinal = p.words; pvpOppWords = p.words; tryShowPvpResult(); }
+            }).on('presence', { event: 'sync' }, () => {
+                if (Object.keys(roomChannel.presenceState()).length >= 2) {
+                    if (lobbyChannel) {
+                        try { supabaseClient.removeChannel(lobbyChannel); } catch(e) {}
+                        lobbyChannel = null;
+                    }
+                    startPvpCountdown();
+                }
+            });
+            
+            roomChannel.subscribe(async s => {
+                if (s === 'SUBSCRIBED') {
+                    try { 
+                        await roomChannel.track({ name: username }); 
+                        // 방 입장 후 즉시 체크하여 상대방과의 동기화 지연 방지
+                        if (Object.keys(roomChannel.presenceState()).length >= 2) {
+                            if (lobbyChannel) {
+                                try { supabaseClient.removeChannel(lobbyChannel); } catch(e) {}
+                                lobbyChannel = null;
+                            }
+                            startPvpCountdown();
+                        }
+                    } catch(e) {}
+                }
+            });
+            
+            pvpRoomGuard = setTimeout(() => {
+                if (pvpState === 'matched') {
+                    cleanupPvpChannels();
+                    pvpState = 'idle';
+                    startMatchmaking();
+                }
+            }, 12000);
+        }
+
+        function updatePvpBoard() { pvpMyWordsEl.textContent = pvpMyWords; pvpOppWordsEl.textContent = pvpOppWords; }
+        
+        function startPvpCountdown() {
+            if (pvpState !== 'matched') return;
+            pvpState = 'countdown';
+            clearTimeout(pvpRoomGuard);
+            pvpMyWords = pvpOppWords = 0;
+            pvpIdx = 0;
+            pvpOppFinal = null;
+            pvpTimeLeft = PVP_TIME;
+            pvpMyNameEl.textContent = username + ' (나)';
+            pvpOppNameEl.textContent = pvpOppName;
+            updatePvpBoard();
+            pvpTimerEl.textContent = PVP_TIME;
+            setPvpView('battle');
+            
+            let c = 3;
+            pvpWordDisplay.textContent = c;
+            pvpCountIv = setInterval(() => {
+                c--;
+                if (c > 0) pvpWordDisplay.textContent = c;
+                else { clearInterval(pvpCountIv); beginPvpPlay(); }
+            }, 1000);
+        }
+
+        function beginPvpPlay() {
+            if (pvpState !== 'countdown') return;
+            pvpState = 'playing';
+            pvpInputBox.disabled = false;
+            pvpInputBox.value = '';
+            pvpInputBox.focus();
+            pvpWordDisplay.textContent = pvpSeq[pvpIdx];
+            pvpGameIv = setInterval(() => {
+                pvpTimeLeft--;
+                pvpTimerEl.textContent = pvpTimeLeft;
+                if (pvpTimeLeft <= 0) finishMyPvpSide();
+            }, 1000);
+        }
+
+        let pvpIsComposing = false;
+        
+        pvpInputBox.addEventListener('compositionstart', () => { pvpIsComposing = true; });
+        
+        pvpInputBox.addEventListener('compositionend', () => { 
+            pvpIsComposing = false; 
+            checkPvpInput(); 
+        });
+
+        pvpInputBox.addEventListener('input', () => { 
+            if (!pvpIsComposing) checkPvpInput(); 
+        });
+
+        function checkPvpInput() {
+            if (pvpState === 'playing' && pvpInputBox.value.trim() === pvpSeq[pvpIdx]) {
+                pvpMyWords++;
+                pvpIdx++;
+                pvpInputBox.value = '';
+                pvpWordDisplay.textContent = pvpSeq[pvpIdx];
+                updatePvpBoard();
+                
+                if (roomChannel) {
+                    roomChannel.send({ type: 'broadcast', event: 'score', payload: { id: pvpId, words: pvpMyWords } });
+                }
+            }
+        }
+
+        function finishMyPvpSide() {
+            if (pvpState !== 'playing') return;
+            pvpState = 'finished';
+            clearInterval(pvpGameIv);
+            pvpInputBox.disabled = true;
+            if (roomChannel) roomChannel.send({ type: 'broadcast', event: 'final', payload: { id: pvpId, words: pvpMyWords } });
+            
+            pvpFinishTimeout = setTimeout(() => {
+                if (pvpState === 'finished') { pvpOppFinal = pvpOppWords; tryShowPvpResult(); }
+            }, 4000);
+            tryShowPvpResult();
+        }
+
+        async function tryShowPvpResult() {
+            if (pvpState !== 'finished' || pvpOppFinal === null) return;
+            pvpState = 'result';
+            clearTimeout(pvpFinishTimeout);
+            
+            const my = pvpMyWords;
+            const op = pvpOppFinal;
+            const reward = my > op ? 30 : my < op ? 10 : 15;
+            const t = document.getElementById('pvpResultTitle');
+            
+            t.textContent = my > op ? '🏆 승리!' : my < op ? '💀 패배...' : '🤝 무승부';
+            t.className = 'pvp-result-title ' + (my > op ? 'pvp-win' : my < op ? 'pvp-lose' : 'pvp-draw');
+            
+            document.getElementById('pvpResultDesc').innerHTML = '나 <b>' + my + '단어</b> vs <b>' + op + '단어</b> ' + pvpOppName + '<br>💰 보상: +' + reward + ' 코인';
+            setPvpView('result');
+            
+            if (currentUser) {
+                userData.coins += reward;
+                try { await saveUserData(); } catch (e) {}
+            }
+            cleanupPvpChannels();
+        }
+
+        function cleanupPvpChannels() {
+            if (lobbyChannel) { try { supabaseClient.removeChannel(lobbyChannel); } catch (e) {} lobbyChannel = null; }
+            if (roomChannel) { try { supabaseClient.removeChannel(roomChannel); } catch (e) {} roomChannel = null; }
+        }
+
+        function resetPvp() {
+            clearInterval(pvpGameIv);
+            clearInterval(pvpCountIv);
+            clearTimeout(pvpFinishTimeout);
+            clearTimeout(pvpRoomGuard);
+            cleanupPvpChannels();
+            pvpState = 'idle';
+            pvpInputBox.value = '';
+            pvpInputBox.disabled = true;
+            setPvpView('status');
+        }
+
+        function pvpRematch() { resetPvp(); startMatchmaking(); }
+        function exitPvp() { resetPvp(); pvpScreen.classList.remove('active'); homeScreen.classList.add('active'); fetchRankings(); checkBuffState(); }
+        
+        window.addEventListener('beforeunload', cleanupPvpChannels);
 
         fetchRankings();
         checkAuthState();
